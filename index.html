@@ -99,6 +99,13 @@ em{font-style:italic;color:var(--camel)}
 .mq span.f{color:var(--camel);-webkit-text-stroke:0;font-style:italic}
 @keyframes mq{to{transform:translateX(-50%)}}
 
+/* band */
+.band{position:relative;height:min(78vh,720px);overflow:hidden;background:var(--green-dd);display:flex;align-items:flex-end}
+.band img{position:absolute;left:0;top:-8%;width:100%;height:116%;object-fit:cover;will-change:transform}
+.band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,30,25,.05) 30%,rgba(10,30,25,.78))}
+.band-in{position:relative;z-index:2;padding-bottom:clamp(36px,6vw,80px)}
+.band h2{color:#fff;max-width:18ch;text-shadow:0 2px 30px rgba(8,24,20,.55);font-weight:300;font-size:clamp(2.6rem,6vw,5.4rem)}
+.band .eyebrow{color:#fff;text-shadow:0 1px 14px rgba(8,24,20,.7)}.band .eyebrow::before{background:var(--camel-l)}
 /* scroll extras */
 #bar{position:fixed;top:0;left:0;height:2px;width:100%;background:var(--camel);transform-origin:0 50%;transform:scaleX(0);z-index:70}
 .js .proj .ph.rv{opacity:1;transform:none;clip-path:inset(0 0 100% 0);transition:clip-path 1.3s var(--ease)}
@@ -243,6 +250,11 @@ em{font-style:italic;color:var(--camel)}
 
 <div class="marquee" aria-hidden="true"><div class="mq" id="mq"><span>Patrimoine</span><span class="f">sur-mesure</span><span>Passif</span><span class="f">durable</span></div></div>
 
+<section class="band" id="band">
+  <img data-px src="assets/img/hero.jpg" alt="Hôtel particulier restauré au lever du soleil" loading="lazy">
+  <div class="band-in wrap"><p class="eyebrow" data-fr="Notre signature" data-en="Our signature">Notre signature</p><h2 data-fr="Révéler le caractère d’un lieu." data-en="Revealing the character of a place.">Révéler le caractère d’un lieu.</h2></div>
+</section>
+
 <section class="section" id="maison">
   <div class="wrap grid2">
     <div class="fig rv">
@@ -270,13 +282,13 @@ em{font-style:italic;color:var(--camel)}
     </div>
     <div class="cards">
       <article class="card rv">
-        <div class="ph"><img data-px src="assets/img/s1.jpg" alt="Rénovation d’un hôtel particulier" loading="lazy"></div>
+        <div class="ph"><img data-px src="assets/img/s1.jpg" alt="Sculptures en pierre et fenêtre cintrée restaurées" loading="lazy"></div>
         <div class="body"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 42V22a16 16 0 0 1 32 0v20M16 42V24a8 8 0 0 1 16 0v18"/></svg>
         <h3 data-fr="Rénovation du patrimoine" data-en="Heritage renovation">Rénovation du patrimoine</h3>
         <p data-fr="Révéler le caractère d’un bâtiment existant, respecter son histoire et lui offrir une seconde vie contemporaine." data-en="Revealing the character of an existing building, respecting its history and giving it a contemporary second life.">Révéler le caractère d’un bâtiment existant, respecter son histoire et lui offrir une seconde vie contemporaine.</p></div>
       </article>
       <article class="card rv d1">
-        <div class="ph"><img data-px src="assets/img/s3.jpg" alt="Reconversion d’une ancienne manufacture" loading="lazy"></div>
+        <div class="ph"><img data-px src="assets/img/s3.jpg" alt="Salon sur-mesure aux boiseries en chêne" loading="lazy"></div>
         <div class="body"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 40 24 8l14 32M16 28h16M24 8v32"/></svg>
         <h3 data-fr="Création sur-mesure" data-en="Bespoke creation">Création sur-mesure</h3>
         <p data-fr="Imaginer un espace nouveau, composé comme une pièce unique : proportions, lumière, matières, finitions." data-en="Imagining a new space composed as a unique piece: proportions, light, materials, finishes.">Imaginer un espace nouveau, composé comme une pièce unique : proportions, lumière, matières, finitions.</p></div>
