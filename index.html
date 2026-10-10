@@ -3,20 +3,201 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>belimm — Façonneur de lieux</title>
+<title>belimm</title>
 <meta name="description" content="belimm, promoteur immobilier haut de gamme : rénovation du patrimoine, sur-mesure et projets passifs. Façonneur de lieux.">
-<meta name="theme-color" content="#1F4F45">
-<link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0f2b25">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<style>
+:root{
+  --green:#1F4F45; --green-d:#173d35; --green-dd:#0f2b25;
+  --camel:#B07D4F; --camel-l:#d1a677;
+  --ivory:#F3F3F2; --sand:#ebe6dd; --ink:#17302a;
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Jost',system-ui,sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{font-family:var(--sans);font-weight:300;background:var(--green-dd);color:var(--ivory);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
+img{display:block;max-width:100%}
+.wrap{width:min(1240px,100% - 48px);margin-inline:auto}
+.eyebrow{font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--camel-l);margin-bottom:1.5rem;display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:"";width:44px;height:1px;background:var(--camel)}
+h1,h2,h3{font-family:var(--serif);font-weight:300;line-height:1.04}
+h2{font-size:clamp(2.3rem,5vw,4.4rem);letter-spacing:-.015em}
+em{font-style:italic;color:var(--camel-l)}
+
+/* 3D canvas & atmosphere */
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.glow{position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(60% 50% at 78% 30%,rgba(44,110,96,.55),transparent 70%),
+  radial-gradient(50% 40% at 15% 85%,rgba(176,125,79,.12),transparent 70%),
+  linear-gradient(180deg,#123a32,#0b211c)}
+.grain{position:fixed;inset:-50%;z-index:60;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+main,footer,.nav{position:relative;z-index:2}
+#bar{position:fixed;top:0;left:0;height:2px;width:100%;background:var(--camel);transform-origin:0 50%;transform:scaleX(0);z-index:80}
+
+/* cursor */
+.cur,.cur-dot{position:fixed;left:0;top:0;z-index:90;pointer-events:none;display:none}
+.has-cursor .cur,.has-cursor .cur-dot{display:block}
+.cur{width:44px;height:44px;margin:-22px 0 0 -22px;border:1px solid rgba(209,166,119,.7);border-radius:50%;transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),background .3s}
+.cur.big{width:86px;height:86px;margin:-43px 0 0 -43px;background:rgba(176,125,79,.18)}
+.cur-dot{width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--camel-l)}
+
+/* NAV */
+.nav{position:fixed;inset:0 0 auto 0;z-index:70;display:flex;align-items:center;justify-content:space-between;padding:24px clamp(20px,4vw,56px);transition:background .5s,padding .5s,backdrop-filter .5s}
+.nav.solid{background:rgba(15,43,37,.72);backdrop-filter:blur(16px);padding-block:14px;box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{height:34px;width:auto}
+.brand-word{font-weight:400;font-size:1.55rem;letter-spacing:.01em;line-height:1}
+.links{display:flex;gap:2.2rem;align-items:center;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase}
+.links a{position:relative;padding:4px 0}
+.links a:not(.cta)::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--camel-l);transition:width .4s var(--ease)}
+.links a:not(.cta):hover::after{width:100%}
+.links .cta{border:1px solid var(--camel);padding:10px 22px;transition:.3s}
+.links .cta:hover{background:var(--camel)}
+.tools{display:flex;align-items:center;gap:18px}
+.lang{font-size:.72rem;letter-spacing:.2em;opacity:.85}
+.lang span{opacity:.4}
+.burger{display:none;width:32px;height:20px;position:relative}
+.burger i{position:absolute;left:0;width:100%;height:1px;background:currentColor;transition:.3s}
+.burger i:first-child{top:5px}.burger i:last-child{bottom:5px}
+.burger[aria-expanded=true] i:first-child{top:9px;transform:rotate(45deg)}
+.burger[aria-expanded=true] i:last-child{bottom:10px;transform:rotate(-45deg)}
+
+/* HERO */
+.hero{min-height:100svh;display:flex;align-items:center;position:relative}
+.hero-inner{width:min(1240px,100% - 48px);margin-inline:auto;padding:140px 0 120px}
+.hero h1{font-size:clamp(3.2rem,8.2vw,7.6rem);letter-spacing:-.025em;margin-bottom:2rem}
+.ln{display:block;overflow:hidden;padding-bottom:.08em}
+.ln>*{display:block}
+.lead{max-width:30rem;font-size:1.06rem;opacity:.82;margin-bottom:2.6rem}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+.btn{display:inline-block;background:var(--camel);color:#fff;padding:16px 34px;font-size:.76rem;letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--camel);transition:background .35s,color .35s,border-color .35s}
+.btn:hover{background:var(--camel-l);border-color:var(--camel-l)}
+.btn.ghost{background:transparent;border-color:rgba(243,243,242,.4)}
+.btn.ghost:hover{background:var(--ivory);color:var(--green-dd);border-color:var(--ivory)}
+.hero-side{position:absolute;right:clamp(20px,4vw,56px);bottom:42px;writing-mode:vertical-rl;font-size:.68rem;letter-spacing:.4em;text-transform:uppercase;color:var(--camel-l)}
+.scroll{position:absolute;left:clamp(20px,4vw,56px);bottom:34px;display:flex;align-items:center;gap:14px;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;opacity:.7}
+.scroll i{display:block;width:1px;height:48px;background:rgba(255,255,255,.2);position:relative;overflow:hidden}
+.scroll i::after{content:"";position:absolute;inset:0;background:var(--camel-l);animation:drip 2.2s infinite var(--ease)}
+@keyframes drip{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+
+/* MARQUEE */
+.marquee{overflow:hidden;padding:clamp(30px,5vw,70px) 0;border-block:1px solid rgba(255,255,255,.08);background:rgba(15,43,37,.55);backdrop-filter:blur(4px)}
+.mq{display:flex;width:max-content;animation:mq 38s linear infinite}
+.mq.rev{animation-direction:reverse;animation-duration:46s}
+.mq span{font-family:var(--serif);font-size:clamp(3rem,9vw,8rem);font-weight:300;white-space:nowrap;padding-right:.5em;color:transparent;-webkit-text-stroke:1px rgba(243,243,242,.38)}
+.mq span.f{color:var(--camel);-webkit-text-stroke:0;font-style:italic}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* sections */
+.section{padding:clamp(90px,13vw,190px) 0;position:relative}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,7vw,120px);align-items:start}
+.maison .txt{grid-column:2}
+.prose p{margin-bottom:1.3rem;font-size:1.08rem;color:rgba(243,243,242,.78)}
+.sign{font-family:var(--serif);font-style:italic;font-size:1.9rem!important;color:var(--camel-l)!important;margin-top:2rem}
+.photo{position:relative;overflow:hidden;aspect-ratio:3/4;background:linear-gradient(160deg,#1f4f45,#0f2b25);margin-top:clamp(30px,5vw,60px);max-width:420px}
+.photo img{position:absolute;inset:-10% 0;width:100%;height:120%;object-fit:cover}
+.maison .lft{grid-column:1;grid-row:1}
+.maison .lft h2{max-width:11ch}
+
+.sf{background:linear-gradient(180deg,rgba(15,43,37,.0),rgba(15,43,37,.72) 18%,rgba(15,43,37,.72) 82%,rgba(15,43,37,0))}
+.head{max-width:48rem;margin-bottom:clamp(40px,6vw,90px)}
+.rows{border-top:1px solid rgba(255,255,255,.14)}
+.row{display:grid;grid-template-columns:1.1fr 1fr 60px;gap:clamp(20px,4vw,70px);align-items:center;padding:clamp(28px,4vw,54px) 0;border-bottom:1px solid rgba(255,255,255,.14);position:relative;overflow:hidden;transition:padding .5s var(--ease)}
+.row::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(176,125,79,.22),transparent);transform:scaleX(0);transform-origin:0 50%;transition:transform .7s var(--ease)}
+.row:hover::before{transform:scaleX(1)}
+.row:hover{padding-left:24px}
+.row h3{font-size:clamp(1.9rem,3.8vw,3.4rem);position:relative}
+.row p{opacity:.72;position:relative;max-width:30rem}
+.row svg{width:44px;height:44px;fill:none;stroke:var(--camel-l);stroke-width:1.2;justify-self:end;position:relative;transition:transform .6s var(--ease)}
+.row:hover svg{transform:rotate(90deg) scale(1.15)}
+
+/* gallery */
+.gallery{height:100vh;min-height:620px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;position:relative}
+.g-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:0 clamp(20px,5vw,80px) 28px}
+.g-head h2{font-size:clamp(2rem,4vw,3.4rem)}
+.g-count{font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;color:var(--camel-l);white-space:nowrap}
+.track{display:flex;gap:clamp(18px,3vw,40px);padding:0 clamp(20px,5vw,80px);width:max-content;will-change:transform}
+.card{position:relative;width:min(74vw,900px);height:min(58vh,560px);overflow:hidden;background:linear-gradient(160deg,#1f4f45,#0f2b25);flex:none}
+.card img{position:absolute;left:0;top:0;height:100%;width:128%;object-fit:cover;will-change:transform}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(8,24,20,.82));pointer-events:none}
+.card .cap{position:absolute;left:0;right:0;bottom:0;padding:clamp(20px,3vw,40px);z-index:2;display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+.cap small{display:block;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--camel-l);margin-bottom:6px}
+.cap h3{font-size:clamp(1.7rem,3vw,2.8rem)}
+.cap .arrow{width:56px;height:56px;border:1px solid rgba(243,243,242,.5);border-radius:50%;display:grid;place-items:center;transition:.4s var(--ease);flex:none}
+.card:hover .arrow{background:var(--camel);border-color:var(--camel);transform:rotate(-45deg)}
+.card img{transition:filter .6s}
+.card:hover img{filter:saturate(1.15) brightness(1.06)}
+.g-prog{margin:28px clamp(20px,5vw,80px) 0;height:1px;background:rgba(255,255,255,.15);position:relative}
+.g-prog i{position:absolute;inset:0;background:var(--camel);transform-origin:0 50%;transform:scaleX(0)}
+.g-note{padding:14px clamp(20px,5vw,80px) 0;font-size:.74rem;opacity:.5}
+
+/* engagement */
+.engage .txt{grid-column:1}
+.list{list-style:none;margin-top:2.4rem}
+.list li{padding:26px 0;border-top:1px solid rgba(255,255,255,.16);position:relative}
+.list li:last-child{border-bottom:1px solid rgba(255,255,255,.16)}
+.list b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(1.5rem,2.4vw,2.1rem);margin-bottom:4px}
+.list span{opacity:.72}
+.engage .sh{background:linear-gradient(90deg,rgba(15,43,37,.7),rgba(15,43,37,0))}
+
+/* contact */
+.contact{background:var(--sand);color:var(--ink)}
+.contact .eyebrow{color:var(--camel)}
+.contact em{color:var(--camel)}
+.prose-p{margin-top:1.6rem;max-width:26rem;color:#3b4f49}
+.form{display:grid;gap:26px}
+.form label span{display:block;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--camel);margin-bottom:6px}
+.form input,.form textarea{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(23,48,42,.3);padding:10px 0;font:inherit;font-size:1.08rem;color:var(--ink);outline:0;resize:vertical;transition:border-color .3s}
+.form input:focus,.form textarea:focus{border-color:var(--camel)}
+.form .btn{justify-self:start;margin-top:8px}
+.ok{color:var(--green)}
+
+.foot{background:var(--green-dd);overflow:hidden;padding-top:48px}
+.foot-in{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-bottom:12px}
+.foot-brand{display:flex;align-items:center;gap:14px}
+.foot-brand small{display:block;font-size:.62rem;letter-spacing:.32em;color:var(--camel-l);margin-top:6px}
+.foot p{font-size:.8rem;opacity:.6}
+.giant{font-weight:400;font-size:clamp(7rem,28vw,26rem);line-height:.8;letter-spacing:-.04em;text-align:center;color:transparent;-webkit-text-stroke:1px rgba(209,166,119,.3);margin-top:30px;transform:translateY(12%);user-select:none}
+
+@media (max-width:900px){
+  .burger{display:block}
+  .links{position:fixed;top:0;left:0;right:0;flex-direction:column;justify-content:center;gap:1.6rem;height:100svh;background:var(--green-dd);font-size:1rem;transform:translateY(-100%);transition:transform .6s var(--ease);z-index:-1}
+  .links.open{transform:none}
+  .grid2{grid-template-columns:1fr}
+  .maison .txt,.maison .lft,.engage .txt{grid-column:1;grid-row:auto}
+  .row{grid-template-columns:1fr}
+  .row svg{justify-self:start}
+  .hero{align-items:flex-end}
+  .hero-inner{padding-top:46vh;padding-bottom:110px}
+  .hero-side{display:none}
+  .card{width:82vw;height:52vh}
+  .g-head{flex-direction:column;align-items:flex-start;gap:8px}
+  .photo{max-width:100%;aspect-ratio:4/3}
+  .sf{background:rgba(15,43,37,.78)}
+  .maison,.engage{background:linear-gradient(180deg,transparent,rgba(15,43,37,.78) 30%)}
+}
+@media (prefers-reduced-motion:reduce){.mq,.grain{animation:none}}
+</style>
 </head>
 <body>
 
+<div class="glow" aria-hidden="true"></div>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div id="bar"></div>
+<div class="cur" id="cur"></div><div class="cur-dot" id="curdot"></div>
+
 <header class="nav" id="nav">
   <a href="#top" class="brand" aria-label="belimm">
-    <img src="assets/logo-mark.svg" alt="" class="brand-mark">
+    <svg class="brand-mark" viewBox="750 460 430 580" aria-hidden="true"><g fill="#F3F3F2"><path d="M763 540 L860 468 L863 760 L800 805 Q788 812 788 832 L788 1028 L763 1028 Z"/><path d="M865 778 L948 727 L950 1028 L865 1028 Z"/></g><g fill="#B07D4F"><path d="M973 793 L1035 825 L1035 1025 L973 998 Z"/><path d="M873 650 C930 626 1015 624 1085 668 C1145 706 1169 780 1169 860 L1169 1028 L1102 1028 L1102 860 C1102 738 1010 645 873 650 Z"/></g></svg>
     <span class="brand-word">belimm</span>
   </a>
   <nav class="links" id="links">
@@ -34,124 +215,121 @@
 
 <main id="top">
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg" aria-hidden="true"><img src="assets/logo-mark.svg" alt=""></div>
+<section class="hero" id="hero">
   <div class="hero-inner">
-    <p class="eyebrow reveal" data-fr="Promotion immobilière haut de gamme" data-en="High-end property development">Promotion immobilière haut de gamme</p>
-    <h1 class="reveal d1">
-      <span data-fr="Les couturiers" data-en="The couturiers">Les couturiers</span><br>
-      <em data-fr="du patrimoine." data-en="of heritage.">du patrimoine.</em>
+    <p class="eyebrow fd" data-fr="Promotion immobilière haut de gamme" data-en="High-end property development">Promotion immobilière haut de gamme</p>
+    <h1>
+      <span class="ln"><span data-fr="Les couturiers" data-en="The couturiers">Les couturiers</span></span>
+      <span class="ln"><em data-fr="du patrimoine." data-en="of heritage.">du patrimoine.</em></span>
     </h1>
-    <p class="lead reveal d2" data-fr="Nous révélons le caractère des bâtiments existants et imaginons des lieux nouveaux, avec la précision d’un atelier de haute couture."
+    <p class="lead fd" data-fr="Nous révélons le caractère des bâtiments existants et imaginons des lieux nouveaux, avec la précision d’un atelier de haute couture."
        data-en="We reveal the character of existing buildings and imagine new places, with the precision of a couture house.">Nous révélons le caractère des bâtiments existants et imaginons des lieux nouveaux, avec la précision d’un atelier de haute couture.</p>
-    <div class="reveal d3 hero-actions">
-      <a href="#realisations" class="btn" data-fr="Découvrir nos réalisations" data-en="Discover our projects">Découvrir nos réalisations</a>
-      <a href="#contact" class="btn ghost" data-fr="Parlons de votre projet" data-en="Let’s discuss your project">Parlons de votre projet</a>
+    <div class="hero-actions fd">
+      <a href="#realisations" class="btn mag" data-fr="Découvrir nos réalisations" data-en="Discover our projects">Découvrir nos réalisations</a>
+      <a href="#contact" class="btn ghost mag" data-fr="Parlons de votre projet" data-en="Let’s discuss your project">Parlons de votre projet</a>
     </div>
   </div>
-  <a href="#maison" class="scroll" aria-label="Scroll"><span></span></a>
+  <p class="hero-side">Façonneur de lieux</p>
+  <a href="#maison" class="scroll" aria-label="Scroll"><i></i><span>Scroll</span></a>
 </section>
 
-<!-- MAISON -->
+<div class="marquee" aria-hidden="true">
+  <div class="mq" id="mq1"><span>Patrimoine</span><span class="f">sur-mesure</span><span>Passif</span><span class="f">durable</span></div>
+</div>
+
 <section class="section maison" id="maison">
   <div class="wrap grid2">
-    <div class="reveal">
-      <p class="eyebrow ink" data-fr="La maison" data-en="The house">La maison</p>
-      <h2 data-fr="Chaque lieu est une pièce unique." data-en="Every place is a unique piece.">Chaque lieu est une pièce unique.</h2>
+    <div class="lft">
+      <p class="eyebrow" data-rv data-fr="La maison" data-en="The house">La maison</p>
+      <h2 data-rv data-fr="Chaque lieu est une pièce unique." data-en="Every place is a unique piece.">Chaque lieu est une pièce unique.</h2>
+      <div class="photo" id="photo"><img id="img-maison" alt="Façade en pierre aux fenêtres cintrées, rendu architectural" ></div>
     </div>
-    <div class="reveal d1 prose">
+    <div class="txt prose" data-stagger>
       <p data-fr="belimm conçoit et développe des projets immobiliers d’exception : rénovation d’édifices anciens, constructions neuves à forte ambition environnementale, y compris passives."
          data-en="belimm designs and develops exceptional property projects: renovation of historic buildings and new builds with strong environmental ambitions, including passive standards.">belimm conçoit et développe des projets immobiliers d’exception : rénovation d’édifices anciens, constructions neuves à forte ambition environnementale, y compris passives.</p>
       <p data-fr="Notre approche est sur-mesure. Qualité architecturale, matériaux rigoureusement choisis, attention minutieuse aux détails : chaque réalisation est pensée pour traverser le temps et offrir à ses occupants une qualité de vie exceptionnelle."
          data-en="Our approach is bespoke. Architectural quality, carefully selected materials, meticulous attention to detail: every development is designed to stand the test of time and give its occupants an exceptional quality of life.">Notre approche est sur-mesure. Qualité architecturale, matériaux rigoureusement choisis, attention minutieuse aux détails : chaque réalisation est pensée pour traverser le temps et offrir à ses occupants une qualité de vie exceptionnelle.</p>
-      <p class="sign" data-fr="Façonneur de lieux" data-en="Façonneur de lieux">Façonneur de lieux</p>
+      <p class="sign">Façonneur de lieux</p>
     </div>
-  </div>
-  <div class="wrap stats reveal">
-    <div><b>01</b><span data-fr="Sur-mesure" data-en="Bespoke">Sur-mesure</span></div>
-    <div><b>02</b><span data-fr="Patrimoine" data-en="Heritage">Patrimoine</span></div>
-    <div><b>03</b><span data-fr="Passif" data-en="Passive">Passif</span></div>
-    <div><b>04</b><span data-fr="Durable" data-en="Enduring">Durable</span></div>
   </div>
 </section>
 
-<!-- SAVOIR-FAIRE -->
-<section class="section dark" id="savoir-faire">
+<section class="section sf" id="savoir-faire">
   <div class="wrap">
-    <div class="head reveal">
-      <p class="eyebrow" data-fr="Savoir-faire" data-en="Expertise">Savoir-faire</p>
-      <h2 data-fr="L’exigence d’un atelier, l’âme d’un lieu." data-en="The rigour of an atelier, the soul of a place.">L’exigence d’un atelier, l’âme d’un lieu.</h2>
+    <div class="head">
+      <p class="eyebrow" data-rv data-fr="Savoir-faire" data-en="Expertise">Savoir-faire</p>
+      <h2 data-rv data-fr="L’exigence d’un atelier, l’âme d’un lieu." data-en="The rigour of an atelier, the soul of a place.">L’exigence d’un atelier, l’âme d’un lieu.</h2>
     </div>
-    <div class="cards">
-      <article class="card reveal">
-        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 42V22a16 16 0 0 1 32 0v20M16 42V24a8 8 0 0 1 16 0v18"/></svg>
+    <div class="rows" data-stagger>
+      <article class="row hv">
         <h3 data-fr="Rénovation du patrimoine" data-en="Heritage renovation">Rénovation du patrimoine</h3>
-        <p data-fr="Révéler le caractère d’un bâtiment existant, respecter son histoire et lui offrir une seconde vie contemporaine."
-           data-en="Revealing the character of an existing building, respecting its history and giving it a contemporary second life.">Révéler le caractère d’un bâtiment existant, respecter son histoire et lui offrir une seconde vie contemporaine.</p>
+        <p data-fr="Révéler le caractère d’un bâtiment existant, respecter son histoire et lui offrir une seconde vie contemporaine." data-en="Revealing the character of an existing building, respecting its history and giving it a contemporary second life.">Révéler le caractère d’un bâtiment existant, respecter son histoire et lui offrir une seconde vie contemporaine.</p>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 42V22a16 16 0 0 1 32 0v20M16 42V24a8 8 0 0 1 16 0v18"/></svg>
       </article>
-      <article class="card reveal d1">
-        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 40 24 8l14 32M16 28h16M24 8v32"/></svg>
+      <article class="row hv">
         <h3 data-fr="Création sur-mesure" data-en="Bespoke creation">Création sur-mesure</h3>
-        <p data-fr="Imaginer un espace nouveau, composé comme une pièce unique : proportions, lumière, matières, finitions."
-           data-en="Imagining a new space composed as a unique piece: proportions, light, materials, finishes.">Imaginer un espace nouveau, composé comme une pièce unique : proportions, lumière, matières, finitions.</p>
+        <p data-fr="Imaginer un espace nouveau, composé comme une pièce unique : proportions, lumière, matières, finitions." data-en="Imagining a new space composed as a unique piece: proportions, light, materials, finishes.">Imaginer un espace nouveau, composé comme une pièce unique : proportions, lumière, matières, finitions.</p>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 40 24 8l14 32M16 28h16M24 8v32"/></svg>
       </article>
-      <article class="card reveal d2">
-        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="14"/><path d="M24 10v28M10 24h28"/></svg>
+      <article class="row hv">
         <h3 data-fr="Projets passifs" data-en="Passive projects">Projets passifs</h3>
-        <p data-fr="Efficacité énergétique, confort thermique et conception passive, dès lors que le projet le permet."
-           data-en="Energy efficiency, thermal comfort and passive design wherever the project allows.">Efficacité énergétique, confort thermique et conception passive, dès lors que le projet le permet.</p>
+        <p data-fr="Efficacité énergétique, confort thermique et conception passive, dès lors que le projet le permet." data-en="Energy efficiency, thermal comfort and passive design wherever the project allows.">Efficacité énergétique, confort thermique et conception passive, dès lors que le projet le permet.</p>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="14"/><path d="M24 10v28M10 24h28"/></svg>
       </article>
     </div>
   </div>
 </section>
 
-<!-- REALISATIONS -->
-<section class="section" id="realisations">
-  <div class="wrap">
-    <div class="head reveal">
-      <p class="eyebrow ink" data-fr="Réalisations" data-en="Projects">Réalisations</p>
+<section class="gallery" id="realisations">
+  <div class="g-head">
+    <div>
+      <p class="eyebrow" data-fr="Réalisations" data-en="Projects">Réalisations</p>
       <h2 data-fr="Une sélection de lieux façonnés." data-en="A selection of shaped places.">Une sélection de lieux façonnés.</h2>
     </div>
-    <div class="projects">
-      <a href="#contact" class="proj big reveal"><div class="art a1"></div><div class="cap"><small data-fr="Rénovation · Patrimoine" data-en="Renovation · Heritage">Rénovation · Patrimoine</small><h3>Hôtel particulier</h3></div></a>
-      <a href="#contact" class="proj reveal d1"><div class="art a2"></div><div class="cap"><small data-fr="Neuf · Passif" data-en="New build · Passive">Neuf · Passif</small><h3>Résidence Les Arcades</h3></div></a>
-      <a href="#contact" class="proj reveal d2"><div class="art a3"></div><div class="cap"><small data-fr="Reconversion" data-en="Conversion">Reconversion</small><h3>L’Ancienne Manufacture</h3></div></a>
-    </div>
-    <p class="note reveal" data-fr="Visuels et noms indicatifs — à remplacer par vos projets et photographies." data-en="Illustrative visuals and names — replace with your projects and photography.">Visuels et noms indicatifs — à remplacer par vos projets et photographies.</p>
+    <p class="g-count" data-fr="Faites défiler" data-en="Keep scrolling">Faites défiler</p>
   </div>
+  <div class="track" id="track">
+    <a href="#contact" class="card hv"><img id="img-a" alt="Hôtel particulier, rendu architectural"><div class="cap"><div><small data-fr="Rénovation · Patrimoine" data-en="Renovation · Heritage">Rénovation · Patrimoine</small><h3>Hôtel particulier</h3></div><span class="arrow">→</span></div></a>
+    <a href="#contact" class="card hv"><img id="img-b" alt="Résidence Les Arcades, rendu architectural"><div class="cap"><div><small data-fr="Neuf · Passif" data-en="New build · Passive">Neuf · Passif</small><h3>Résidence Les Arcades</h3></div><span class="arrow">→</span></div></a>
+    <a href="#contact" class="card hv"><img id="img-c" alt="L’Ancienne Manufacture, rendu architectural"><div class="cap"><div><small data-fr="Reconversion" data-en="Conversion">Reconversion</small><h3>L’Ancienne Manufacture</h3></div><span class="arrow">→</span></div></a>
+  </div>
+  <div class="g-prog"><i id="gprog"></i></div>
+  <p class="g-note" data-fr="Rendus et noms indicatifs, à remplacer par vos projets et photographies." data-en="Illustrative renders and names, to be replaced by your projects and photography.">Rendus et noms indicatifs, à remplacer par vos projets et photographies.</p>
 </section>
 
-<!-- ENGAGEMENT -->
+<div class="marquee" aria-hidden="true">
+  <div class="mq rev" id="mq2"><span class="f">Façonneur</span><span>de lieux</span><span class="f">Façonneur</span><span>de lieux</span></div>
+</div>
+
 <section class="section engage" id="engagement">
-  <div class="wrap grid2">
-    <div class="reveal">
-      <p class="eyebrow" data-fr="Engagement" data-en="Commitment">Engagement</p>
-      <h2 data-fr="L’équilibre entre le lieu et ceux qui l’habitent." data-en="Balance between the place and those who live in it.">L’équilibre entre le lieu et ceux qui l’habitent.</h2>
+  <div class="sh" style="position:absolute;inset:0;pointer-events:none"></div>
+  <div class="wrap grid2" style="position:relative">
+    <div class="txt">
+      <p class="eyebrow" data-rv data-fr="Engagement" data-en="Commitment">Engagement</p>
+      <h2 data-rv data-fr="L’équilibre entre le lieu et ceux qui l’habitent." data-en="Balance between the place and those who live in it.">L’équilibre entre le lieu et ceux qui l’habitent.</h2>
+      <ul class="list" data-stagger>
+        <li><b data-fr="Sobriété énergétique" data-en="Energy sobriety">Sobriété énergétique</b><span data-fr="Conception passive, performance de l’enveloppe, faible besoin en énergie." data-en="Passive design, high-performing envelope, low energy demand.">Conception passive, performance de l’enveloppe, faible besoin en énergie.</span></li>
+        <li><b data-fr="Confort thermique" data-en="Thermal comfort">Confort thermique</b><span data-fr="Un bien-être au quotidien, été comme hiver." data-en="Everyday well-being, summer and winter.">Un bien-être au quotidien, été comme hiver.</span></li>
+        <li><b data-fr="Qualité d’usage" data-en="Quality of use">Qualité d’usage</b><span data-fr="Des espaces pensés pour la vie réelle de leurs occupants." data-en="Spaces designed for the real lives of their occupants.">Des espaces pensés pour la vie réelle de leurs occupants.</span></li>
+        <li><b data-fr="Harmonie avec le site" data-en="Harmony with the site">Harmonie avec le site</b><span data-fr="Une intégration juste dans l’environnement et le paysage." data-en="A fitting integration into environment and landscape.">Une intégration juste dans l’environnement et le paysage.</span></li>
+      </ul>
     </div>
-    <ul class="list reveal d1">
-      <li><b data-fr="Sobriété énergétique" data-en="Energy sobriety">Sobriété énergétique</b><span data-fr="Conception passive, performance de l’enveloppe, faible besoin en énergie." data-en="Passive design, high-performing envelope, low energy demand.">Conception passive, performance de l’enveloppe, faible besoin en énergie.</span></li>
-      <li><b data-fr="Confort thermique" data-en="Thermal comfort">Confort thermique</b><span data-fr="Un bien-être au quotidien, été comme hiver." data-en="Everyday well-being, summer and winter.">Un bien-être au quotidien, été comme hiver.</span></li>
-      <li><b data-fr="Qualité d’usage" data-en="Quality of use">Qualité d’usage</b><span data-fr="Des espaces pensés pour la vie réelle de leurs occupants." data-en="Spaces designed for the real lives of their occupants.">Des espaces pensés pour la vie réelle de leurs occupants.</span></li>
-      <li><b data-fr="Harmonie avec le site" data-en="Harmony with the site">Harmonie avec le site</b><span data-fr="Une intégration juste dans l’environnement et le paysage." data-en="A fitting integration into environment and landscape.">Une intégration juste dans l’environnement et le paysage.</span></li>
-    </ul>
   </div>
 </section>
 
-<!-- CONTACT -->
 <section class="section contact" id="contact">
   <div class="wrap grid2">
-    <div class="reveal">
-      <p class="eyebrow ink" data-fr="Contact" data-en="Contact">Contact</p>
-      <h2 data-fr="Façonnons votre prochain lieu." data-en="Let’s shape your next place.">Façonnons votre prochain lieu.</h2>
-      <p class="prose-p" data-fr="Un terrain, un édifice à révéler, une idée à construire ? Écrivez-nous, nous vous répondrons personnellement." data-en="A plot, a building to reveal, an idea to build? Write to us — we will reply personally.">Un terrain, un édifice à révéler, une idée à construire ? Écrivez-nous, nous vous répondrons personnellement.</p>
+    <div>
+      <p class="eyebrow" data-rv data-fr="Contact" data-en="Contact">Contact</p>
+      <h2 data-rv data-fr="Façonnons votre prochain lieu." data-en="Let’s shape your next place.">Façonnons votre prochain lieu.</h2>
+      <p class="prose-p" data-fr="Un terrain, un édifice à révéler, une idée à construire ? Écrivez-nous, nous vous répondrons personnellement." data-en="A plot, a building to reveal, an idea to build? Write to us and we will reply personally.">Un terrain, un édifice à révéler, une idée à construire ? Écrivez-nous, nous vous répondrons personnellement.</p>
     </div>
-    <form class="form reveal d1" id="form">
-      <label><span data-fr="Nom" data-en="Name">Nom</span><input required name="name" autocomplete="name"></label>
-      <label><span>Email</span><input required type="email" name="email" autocomplete="email"></label>
-      <label><span data-fr="Votre projet" data-en="Your project">Votre projet</span><textarea rows="4" name="msg"></textarea></label>
-      <button class="btn" type="submit" data-fr="Envoyer" data-en="Send">Envoyer</button>
-      <p class="ok" id="ok" hidden data-fr="Merci — votre message est prêt à être envoyé." data-en="Thank you — your message is ready to send.">Merci — votre message est prêt à être envoyé.</p>
+    <form class="form" id="form">
+      <label><span data-fr="Nom" data-en="Name">Nom</span><input id="f-name" required name="name" autocomplete="name"></label>
+      <label><span>Email</span><input id="f-email" required type="email" name="email" autocomplete="email"></label>
+      <label><span data-fr="Votre projet" data-en="Your project">Votre projet</span><textarea id="f-msg" rows="4" name="msg"></textarea></label>
+      <button class="btn mag" type="submit" data-fr="Envoyer" data-en="Send">Envoyer</button>
+      <p class="ok" id="ok" hidden data-fr="Merci, votre message est prêt à être envoyé." data-en="Thank you, your message is ready to send.">Merci, votre message est prêt à être envoyé.</p>
     </form>
   </div>
 </section>
@@ -160,13 +338,356 @@
 <footer class="foot">
   <div class="wrap foot-in">
     <div class="foot-brand">
-      <img src="assets/logo-mark.svg" alt="" class="brand-mark">
+      <svg class="brand-mark" viewBox="750 460 430 580" aria-hidden="true"><g fill="#F3F3F2"><path d="M763 540 L860 468 L863 760 L800 805 Q788 812 788 832 L788 1028 L763 1028 Z"/><path d="M865 778 L948 727 L950 1028 L865 1028 Z"/></g><g fill="#B07D4F"><path d="M973 793 L1035 825 L1035 1025 L973 998 Z"/><path d="M873 650 C930 626 1015 624 1085 668 C1145 706 1169 780 1169 860 L1169 1028 L1102 1028 L1102 860 C1102 738 1010 645 873 650 Z"/></g></svg>
       <div><span class="brand-word">belimm</span><small>FAÇONNEUR DE LIEUX</small></div>
     </div>
     <p>© <span id="yr"></span> belimm. <span data-fr="Tous droits réservés." data-en="All rights reserved.">Tous droits réservés.</span></p>
   </div>
+  <div class="giant" aria-hidden="true">belimm</div>
 </footer>
 
-<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var $=function(s,c){return (c||document).querySelector(s)};
+  var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isMobile=function(){return innerWidth<900};
+
+  /* ---------- UI basics (work even without libraries) ---------- */
+  var nav=$('#nav'),links=$('#links'),burger=$('#burger');
+  function onScroll(){nav.classList.toggle('solid',scrollY>40)}
+  onScroll();addEventListener('scroll',onScroll,{passive:true});
+  burger.addEventListener('click',function(){var o=links.classList.toggle('open');burger.setAttribute('aria-expanded',o)});
+  links.addEventListener('click',function(e){if(e.target.tagName==='A'){links.classList.remove('open');burger.setAttribute('aria-expanded','false')}});
+
+  var lang='fr';
+  try{lang=localStorage.getItem('belimm-lang')||'fr'}catch(e){}
+  function applyLang(l){
+    document.documentElement.lang=l;
+    $$('[data-'+l+']').forEach(function(el){el.textContent=el.getAttribute('data-'+l)});
+    try{localStorage.setItem('belimm-lang',l)}catch(e){}
+  }
+  applyLang(lang);
+  $('#lang').addEventListener('click',function(){lang=lang==='fr'?'en':'fr';applyLang(lang)});
+  $('#form').addEventListener('submit',function(e){e.preventDefault();$('#ok').hidden=false;this.reset()});
+  $('#yr').textContent=new Date().getFullYear();
+
+  /* marquee duplicate */
+  ['mq1','mq2'].forEach(function(id){var m=document.getElementById(id);m.innerHTML=m.innerHTML+m.innerHTML});
+
+  /* cursor */
+  if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!reduce){
+    document.body.classList.add('has-cursor');
+    var cur=$('#cur'),dot=$('#curdot'),cx=0,cy=0,tx=0,ty=0;
+    addEventListener('mousemove',function(e){tx=e.clientX;ty=e.clientY;dot.style.transform='translate('+tx+'px,'+ty+'px)'});
+    (function loop(){cx+=(tx-cx)*.16;cy+=(ty-cy)*.16;cur.style.transform='translate('+cx+'px,'+cy+'px)';requestAnimationFrame(loop)})();
+    $$('a,button,.hv,input,textarea').forEach(function(el){
+      el.addEventListener('mouseenter',function(){cur.classList.add('big')});
+      el.addEventListener('mouseleave',function(){cur.classList.remove('big')});
+    });
+    $$('.mag').forEach(function(b){
+      b.addEventListener('mousemove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.25)+'px,'+((e.clientY-r.top-r.height/2)*.35)+'px)'});
+      b.addEventListener('mouseleave',function(){b.style.transform='';b.style.transition='transform .5s cubic-bezier(.2,.7,.2,1)';setTimeout(function(){b.style.transition=''},500)});
+    });
+  }
+
+  if(!window.THREE||!window.gsap||!window.ScrollTrigger){return}
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- 3D scene ---------- */
+  var S={gx:2.2,gy:0,ry:-.35,rx:0,scale:1,explode:0,camZ:12,camY:.4,mix:0,spin:1};
+  var glOK=true,scene,camera,renderer,group,pieces=[],floor,ring,dir,dust,mouse={x:0,y:0,tx:0,ty:0};
+
+  function M(c,o){return new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.8,metalness:0},o||{}))}
+
+  function initMain(){
+    var canvas=$('#gl');
+    renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));
+    renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+    renderer.outputEncoding=THREE.sRGBEncoding;
+    scene=new THREE.Scene();scene.fog=new THREE.Fog(0x0f2b25,13,40);
+    camera=new THREE.PerspectiveCamera(35,1,.1,100);
+
+    scene.add(new THREE.HemisphereLight(0xfff1e0,0x1f4f45,.85));
+    dir=new THREE.DirectionalLight(0xffe2bf,1.9);dir.position.set(5,9,7);dir.castShadow=true;
+    dir.shadow.mapSize.set(2048,2048);var sc=dir.shadow.camera;sc.left=-9;sc.right=9;sc.top=9;sc.bottom=-9;sc.near=1;sc.far=30;dir.shadow.bias=-.0004;dir.shadow.radius=4;
+    scene.add(dir);
+    var rim=new THREE.DirectionalLight(0xb07d4f,1.6);rim.position.set(-7,3,-5);scene.add(rim);
+    var fill=new THREE.PointLight(0x7fd1bd,.9,30);fill.position.set(-5,1,8);scene.add(fill);
+
+    /* the belimm mark in 3D */
+    var CX=965,CY=750,K=.01;
+    function T(x,y){return [(x-CX)*K,-(y-CY)*K]}
+    function poly(pts){var s=new THREE.Shape();pts.forEach(function(p,i){var a=T(p[0],p[1]);i?s.lineTo(a[0],a[1]):s.moveTo(a[0],a[1])});s.closePath();return s}
+    var arc=new THREE.Shape(),p0=T(873,650);arc.moveTo(p0[0],p0[1]);
+    function bz(a,b,c,d,e,f){var A=T(a,b),B=T(c,d),C=T(e,f);arc.bezierCurveTo(A[0],A[1],B[0],B[1],C[0],C[1])}
+    bz(930,626,1015,624,1085,668);bz(1145,706,1169,780,1169,860);
+    var q=T(1169,1028);arc.lineTo(q[0],q[1]);q=T(1102,1028);arc.lineTo(q[0],q[1]);q=T(1102,860);arc.lineTo(q[0],q[1]);
+    bz(1102,738,1010,645,873,650);
+    var ivory=M(0xf3f3f2,{roughness:.3,metalness:.05,emissive:0x1a1a1a});
+    var camel=M(0x86521f,{roughness:.5,metalness:.12,emissive:0x1f1006});
+    var defs=[
+      {s:poly([[763,540],[860,468],[863,760],[800,805],[788,832],[788,1028],[763,1028]]),d:.7,m:ivory,e:[-1.4,.3,1.0]},
+      {s:poly([[865,778],[948,727],[950,1028],[865,1028]]),d:.55,m:ivory,e:[-.3,-.2,2.2]},
+      {s:poly([[973,793],[1035,825],[1035,1025],[973,998]]),d:.4,m:camel,e:[.8,-.1,3.1]},
+      {s:arc,d:.6,m:camel,e:[1.6,.8,-1.0]}
+    ];
+    group=new THREE.Group();scene.add(group);
+    defs.forEach(function(df){
+      var g=new THREE.ExtrudeGeometry(df.s,{depth:df.d,bevelEnabled:true,bevelThickness:.035,bevelSize:.03,bevelSegments:3,curveSegments:40});
+      g.translate(0,0,-df.d/2);
+      var m=new THREE.Mesh(g,df.m);m.castShadow=true;m.receiveShadow=true;group.add(m);
+      pieces.push({m:m,e:df.e});
+    });
+
+    /* stage */
+    floor=new THREE.Mesh(new THREE.PlaneGeometry(80,80),new THREE.ShadowMaterial({opacity:.38}));
+    floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
+    ring=new THREE.Mesh(new THREE.RingGeometry(3.4,3.43,128),new THREE.MeshBasicMaterial({color:0xb07d4f,transparent:true,opacity:.45,side:THREE.DoubleSide}));
+    ring.rotation.x=-Math.PI/2;scene.add(ring);
+    var ring2=new THREE.Mesh(new THREE.RingGeometry(5.2,5.215,128),new THREE.MeshBasicMaterial({color:0xb07d4f,transparent:true,opacity:.2,side:THREE.DoubleSide}));
+    ring2.rotation.x=-Math.PI/2;ring.add(ring2);
+
+    /* slender towers in the distance for depth */
+    var tm=M(0x173d35,{roughness:.85}),tm2=M(0x1f4f45,{roughness:.8});
+    var rnd=function(a,b){return a+Math.random()*(b-a)};
+    for(var i=0;i<46;i++){
+      var h=rnd(2.5,11),w=rnd(.5,1.4);
+      var t=new THREE.Mesh(new THREE.BoxGeometry(w,h,rnd(.5,1.4)),i%5?tm:tm2);
+      var side=i%2?1:-1;
+      t.position.set(side*rnd(6,26)+(Math.random()-.5)*4,-3+h/2,-rnd(5,34));
+      scene.add(t);
+    }
+
+    /* dust */
+    var n=380,pos=new Float32Array(n*3);
+    for(var j=0;j<n;j++){pos[j*3]=rnd(-14,14);pos[j*3+1]=rnd(-3,8);pos[j*3+2]=rnd(-14,8)}
+    var gd=new THREE.BufferGeometry();gd.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    dust=new THREE.Points(gd,new THREE.PointsMaterial({color:0xd1a677,size:.045,transparent:true,opacity:.6,depthWrite:false}));
+    scene.add(dust);
+
+    function resize(){
+      var w=innerWidth,h=innerHeight;
+      renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w/h<.9?48:35;camera.updateProjectionMatrix();
+    }
+    resize();addEventListener('resize',resize);
+    addEventListener('mousemove',function(e){mouse.tx=e.clientX/innerWidth*2-1;mouse.ty=e.clientY/innerHeight*2-1});
+
+    var warm=new THREE.Color(0xffe2bf),cool=new THREE.Color(0xbfeede),t0=performance.now();
+    (function frame(){
+      var t=(performance.now()-t0)/1000;
+      mouse.x+=(mouse.tx-mouse.x)*.05;mouse.y+=(mouse.ty-mouse.y)*.05;
+      group.position.set(S.gx,S.gy,0);group.scale.setScalar(S.scale);
+      group.rotation.set(S.rx-mouse.y*.12,S.ry+mouse.x*.28+Math.sin(t*.4)*.08*S.spin,0);
+      pieces.forEach(function(p){p.m.position.set(p.e[0]*S.explode,p.e[1]*S.explode,p.e[2]*S.explode)});
+      var fy=S.gy-2.8*S.scale-.1;floor.position.set(S.gx,fy,0);ring.position.set(S.gx,fy+.02,0);
+      ring.scale.setScalar(S.scale);ring.rotation.z=t*.05;
+      camera.position.set(mouse.x*.35,S.camY-mouse.y*.2,S.camZ);camera.lookAt(0,0,0);
+      dir.color.copy(warm).lerp(cool,S.mix);
+      dust.rotation.y=t*.012;dust.position.y=Math.sin(t*.2)*.2;
+      renderer.render(scene,camera);
+      requestAnimationFrame(frame);
+    })();
+  }
+
+  /* ---------- architectural renders (static pictures) ---------- */
+  function renderShot(build,o){
+    var w=o.w||1500,h=o.h||960;
+    var r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+    r.setPixelRatio(1);r.setSize(w,h);
+    r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;
+    r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.1;r.outputEncoding=THREE.sRGBEncoding;
+    var sc=new THREE.Scene();
+    var cv=document.createElement('canvas');cv.width=4;cv.height=512;
+    var cx=cv.getContext('2d'),gr=cx.createLinearGradient(0,0,0,512);
+    gr.addColorStop(0,'#0f2b25');gr.addColorStop(.45,'#1f5a4e');gr.addColorStop(.78,'#c98f5e');gr.addColorStop(1,'#f3cf9f');
+    cx.fillStyle=gr;cx.fillRect(0,0,4,512);
+    var tex=new THREE.CanvasTexture(cv);tex.encoding=THREE.sRGBEncoding;sc.background=tex;
+    sc.fog=new THREE.Fog(0x8f6f55,26,60);
+    sc.add(new THREE.HemisphereLight(0xffe6c8,0x1f4f45,.9));
+    var d=new THREE.DirectionalLight(0xffcf9c,2.8);d.position.set(-9,8,10);d.castShadow=true;
+    d.shadow.mapSize.set(2048,2048);var c=d.shadow.camera;c.left=-16;c.right=16;c.top=14;c.bottom=-10;c.near=1;c.far=50;d.shadow.bias=-.0005;
+    sc.add(d);
+    var gnd=new THREE.Mesh(new THREE.PlaneGeometry(200,200),M(0x1b3a33,{roughness:.95}));
+    gnd.rotation.x=-Math.PI/2;gnd.receiveShadow=true;sc.add(gnd);
+    var path=new THREE.Mesh(new THREE.PlaneGeometry(40,5),M(0x8d7a62,{roughness:.9}));
+    path.rotation.x=-Math.PI/2;path.position.set(0,.01,5);path.receiveShadow=true;sc.add(path);
+    build(sc);
+    var cam=new THREE.PerspectiveCamera(o.fov||30,w/h,.1,200);
+    cam.position.set.apply(cam.position,o.cam);cam.lookAt.apply(cam,o.look);
+    r.render(sc,cam);
+    var url=r.domElement.toDataURL('image/jpeg',.88);
+    r.dispose();
+    return url;
+  }
+  var stone=function(){return M(0xd9caaf,{roughness:.92})};
+  function box(par,w,h,d,mat,x,y,z){var m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;par.add(m);return m}
+  function archPath(p,x,w,y,hh){
+    var r=w/2;p.moveTo(x-r,y);p.lineTo(x-r,y+hh-r);p.absarc(x,y+hh-r,r,Math.PI,0,true);p.lineTo(x+r,y);p.lineTo(x-r,y);
+  }
+  var WARM=new THREE.MeshBasicMaterial({color:0xffc27a}),DIM=new THREE.MeshBasicMaterial({color:0x1b2a26});
+  /* wall with real arched openings and lit interiors */
+  function archWall(par,w,h,d,arches,mat,x,y,z){
+    var s=new THREE.Shape();s.moveTo(-w/2,0);s.lineTo(w/2,0);s.lineTo(w/2,h);s.lineTo(-w/2,h);s.lineTo(-w/2,0);
+    arches.forEach(function(a){var hp=new THREE.Path();archPath(hp,a.x,a.w,a.y,a.h);s.holes.push(hp)});
+    var g=new THREE.ExtrudeGeometry(s,{depth:d,bevelEnabled:false,curveSegments:24});
+    var m=new THREE.Mesh(g,mat);m.position.set(x,y,z-d/2);m.castShadow=true;m.receiveShadow=true;par.add(m);
+    arches.forEach(function(a,i){
+      var sh=new THREE.Shape();archPath(sh,a.x,a.w,a.y,a.h);
+      var pl=new THREE.Mesh(new THREE.ShapeGeometry(sh,16),(i*7+Math.floor(a.x*3))%5<3?WARM:DIM);
+      pl.position.set(x,y,z-d/2+.12);par.add(pl);
+    });
+  }
+  function tree(par,x,z,s){
+    var t=new THREE.Mesh(new THREE.CylinderGeometry(.08*s,.12*s,1.4*s,8),M(0x4a3524));t.position.set(x,.7*s,z);t.castShadow=true;par.add(t);
+    var f=new THREE.Mesh(new THREE.SphereGeometry(1.05*s,20,16),M(0x2f6b4b,{roughness:.95}));f.position.set(x,1.9*s,z);f.castShadow=true;par.add(f);
+  }
+  function buildA(sc){
+    var st=stone(),g=new THREE.Group();sc.add(g);
+    var ar=[],i;
+    for(i=0;i<5;i++){ar.push({x:-3.2+i*1.6,w:i===2?1.4:1,y:.0,h:i===2?2.6:2.2})}
+    for(i=0;i<5;i++){ar.push({x:-3.2+i*1.6,w:.95,y:2.75,h:2.0})}
+    archWall(g,9.2,5.4,.7,ar,st,0,.4,0);
+    box(g,9.2,5.4,5,st,0,3.1,-2.85);
+    box(g,9.9,.4,1.1,M(0xb9a98c),0,.2,-.05);
+    box(g,9.5,.14,.85,st,0,2.55,.1);
+    box(g,9.9,.3,1.15,st,0,5.95,.05);
+    var shp=new THREE.Shape();shp.moveTo(-4.9,0);shp.lineTo(4.9,0);shp.lineTo(4,1.7);shp.lineTo(-4,1.7);shp.closePath();
+    var mg=new THREE.Mesh(new THREE.ExtrudeGeometry(shp,{depth:5.2,bevelEnabled:false}),M(0x34423f,{roughness:.7,metalness:.2}));
+    mg.position.set(0,6.1,-5.3);mg.castShadow=true;mg.receiveShadow=true;g.add(mg);
+    [-2.4,0,2.4].forEach(function(x){box(g,.95,1,.6,st,x,6.95,.05);var w=new THREE.Mesh(new THREE.PlaneGeometry(.5,.62),WARM);w.position.set(x,6.95,.36);g.add(w)});
+    var br=M(0xb07d4f,{metalness:.5,roughness:.4});
+    for(i=0;i<5;i++)box(g,1.25,.07,.4,br,-3.2+i*1.6,2.78,.3);
+    box(g,2.2,.18,1,M(0xb9a98c),0,.46,.5);
+    tree(g,-6.6,1.8,1.1);tree(g,6.8,1.4,1);tree(g,-8.4,-1,.8);
+    g.position.y=0;
+  }
+  function buildB(sc){
+    var g=new THREE.Group();sc.add(g);var pl=M(0xeee8dc,{roughness:.9}),i;
+    var ar=[];for(i=0;i<7;i++)ar.push({x:-5.4+i*1.8,w:1.3,y:0,h:2.7});
+    archWall(g,13.6,3.1,.6,ar,pl,0,0,0);
+    box(g,13.6,3.1,5,pl,0,1.55,-3.1);
+    var wood=M(0x7a5333,{roughness:.8});
+    box(g,11.6,2.7,4.4,wood,-.4,4.45,-1.4);
+    for(i=0;i<58;i++)box(g,.07,2.7,.12,M(0xb0824f,{roughness:.7}),-6+i*.2,4.45,.84);
+    var glass=new THREE.Mesh(new THREE.BoxGeometry(5.2,1.9,.1),new THREE.MeshStandardMaterial({color:0xa6d8cf,transparent:true,opacity:.55,metalness:.6,roughness:.08}));
+    glass.position.set(-1.6,4.45,.95);g.add(glass);
+    box(g,5.4,.1,.16,M(0x1b2624),-1.6,5.42,.95);box(g,5.4,.1,.16,M(0x1b2624),-1.6,3.5,.95);
+    box(g,7.4,2.4,3.8,pl,-2.2,7,-1.8);
+    box(g,7.6,.14,4,M(0x55803f,{roughness:1}),-2.2,8.27,-1.8);
+    box(g,11.8,.14,4.6,M(0x55803f,{roughness:1}),-.4,5.87,-1.4);
+    for(i=0;i<6;i++){var sp=box(g,1,.05,1.5,M(0x1b2a3a,{metalness:.7,roughness:.25}),-4.6+i*1.1,8.55,-1.8);sp.rotation.x=-.35}
+    for(i=0;i<8;i++)box(g,.1,.1,2.4,wood,-6+i*.95,6.3,1.2-.0);
+    box(g,7.6,.12,.12,wood,-2.2,6.3,2.35);
+    tree(g,7.4,1.8,1);tree(g,-8.2,1.6,1.2);tree(g,9,-.8,.8);
+  }
+  function buildC(sc){
+    var g=new THREE.Group();sc.add(g);var br=M(0xa3563a,{roughness:.96}),i;
+    var ar=[];for(i=0;i<6;i++)ar.push({x:-5.5+i*2.2,w:1.4,y:.7,h:3.3});
+    archWall(g,14,4.8,.7,ar,br,0,0,0);
+    box(g,14,4.8,7,br,0,2.4,-4.2);
+    box(g,14.3,.2,.9,M(0x2e3836),0,4.9,0);
+    var sp=new THREE.Shape();sp.moveTo(-7,0);
+    for(i=0;i<4;i++){sp.lineTo(-7+i*3.5,1.7);sp.lineTo(-7+(i+1)*3.5,0)}
+    sp.lineTo(-7,0);
+    var sg=new THREE.Mesh(new THREE.ExtrudeGeometry(sp,{depth:7,bevelEnabled:false}),M(0x2e3836,{roughness:.6,metalness:.3}));
+    sg.position.set(0,4.8,-7.7);sg.castShadow=true;g.add(sg);
+    var ch=new THREE.Mesh(new THREE.CylinderGeometry(.55,.7,10,16),br);ch.position.set(6.2,5,-5);ch.castShadow=true;g.add(ch);
+    var cap=new THREE.Mesh(new THREE.CylinderGeometry(.75,.6,.35,16),M(0x2e3836));cap.position.set(6.2,10.1,-5);g.add(cap);
+    var glass=new THREE.Mesh(new THREE.BoxGeometry(4.2,3.9,5),new THREE.MeshStandardMaterial({color:0xa6d8cf,transparent:true,opacity:.42,metalness:.6,roughness:.08}));
+    glass.position.set(-9.5,1.95,-1.6);g.add(glass);
+    var fr=M(0x1b2624,{metalness:.6,roughness:.4});
+    [0,1.3,2.6,3.9].forEach(function(y){box(g,4.3,.1,5.1,fr,-9.5,y+.02,-1.6)});
+    [-11.6,-9.5,-7.4].forEach(function(x){box(g,.1,3.9,.1,fr,x,1.95,.9)});
+    box(g,4.3,.12,5.1,M(0x7a5333),-9.5,3.95,-1.6);
+    tree(g,8.8,2,1.1);tree(g,-12.5,2.2,.9);
+  }
+
+  function makeImages(){
+    try{
+      $('#img-a').src=renderShot(buildA,{cam:[7.5,3.6,15.5],look:[0,3.2,0]});
+      $('#img-b').src=renderShot(buildB,{cam:[9.5,5.2,16],look:[0,3.8,0]});
+      $('#img-c').src=renderShot(buildC,{cam:[-2,3.8,17],look:[-1,3.4,-1.5]});
+      $('#img-maison').src=renderShot(buildA,{cam:[-3.6,1.7,6.8],look:[1.2,3.1,0],fov:46,w:900,h:1200});
+    }catch(e){}
+    ScrollTrigger.refresh();
+  }
+
+  /* ---------- scroll choreography ---------- */
+  function choreo(){
+    var m=isMobile();
+    var st=m?{
+      hero:{gx:0,gy:2.2,ry:-.35,scale:.62,explode:0,camZ:12,camY:.4,mix:0},
+      maison:{gx:0,gy:2.6,ry:.9,scale:.5,explode:1.2,camZ:11,camY:.6,mix:.1},
+      sf:{gx:0,gy:2.8,ry:3.2,scale:.55,explode:.6,camZ:12,camY:.3,mix:.3},
+      real:{gx:0,gy:9,ry:4.6,scale:.5,explode:0,camZ:10,camY:2,mix:.3},
+      engage:{gx:0,gy:2.6,ry:5.3,scale:.5,explode:.3,camZ:11,camY:.4,mix:1},
+      contact:{gx:0,gy:-9,ry:6.3,scale:.5,explode:0,camZ:11,camY:0,mix:1}
+    }:{
+      hero:{gx:3.0,gy:0,ry:-.35,scale:.95,explode:0,camZ:12,camY:.4,mix:0},
+      maison:{gx:-2.7,gy:0,ry:.95,scale:1,explode:1.3,camZ:11,camY:.8,mix:.1},
+      sf:{gx:2.4,gy:-.2,ry:3.3,scale:1.25,explode:.7,camZ:13,camY:.2,mix:.3},
+      real:{gx:0,gy:10,ry:4.6,scale:.6,explode:0,camZ:10,camY:2,mix:.3},
+      engage:{gx:3,gy:0,ry:5.4,scale:1.05,explode:.35,camZ:11,camY:.5,mix:1},
+      contact:{gx:0,gy:-10,ry:6.3,scale:.8,explode:0,camZ:11,camY:0,mix:1}
+    };
+    Object.assign(S,st.hero);
+
+    /* intro */
+    if(!reduce){
+      gsap.from(S,{explode:7,ry:S.ry-2.4,scale:S.scale*.35,duration:2.8,ease:'expo.out',delay:.15});
+      gsap.from('.hero .ln > *',{yPercent:118,duration:1.5,stagger:.14,ease:'power4.out',delay:.25});
+      gsap.from('.hero .fd',{y:28,opacity:0,duration:1.2,stagger:.12,ease:'power3.out',delay:.55});
+      gsap.from('.hero-side,.scroll',{opacity:0,duration:1.4,delay:1.2});
+    }
+
+    function go(id,key,start,end){
+      var o=Object.assign({},st[key],{ease:'none',overwrite:false,scrollTrigger:{trigger:'#'+id,start:start||'top bottom',end:end||'top 25%',scrub:1.2}});
+      gsap.to(S,o);
+    }
+    go('maison','maison');
+    go('savoir-faire','sf');
+
+    /* pinned horizontal gallery */
+    var track=$('#track');
+    var dist=function(){return Math.max(0,track.scrollWidth-innerWidth+parseFloat(getComputedStyle(track).paddingLeft))};
+    var hs=gsap.to(track,{x:function(){return -dist()},ease:'none',scrollTrigger:{trigger:'#realisations',pin:true,scrub:1,start:'top top',end:function(){return '+='+dist()},invalidateOnRefresh:true,anticipatePin:1,
+      onUpdate:function(self){$('#gprog').style.transform='scaleX('+self.progress+')'}}});
+    $$('.card img').forEach(function(img){
+      gsap.fromTo(img,{xPercent:0},{xPercent:-17,ease:'none',scrollTrigger:{trigger:img.parentNode,containerAnimation:hs,start:'left right',end:'right left',scrub:true}});
+    });
+    go('realisations','real','top bottom','top top');
+    go('engagement','engage','top bottom','top 25%');
+    go('contact','contact','top bottom','top 40%');
+
+    /* reveals */
+    $$('[data-rv]').forEach(function(el){
+      gsap.from(el,{y:60,opacity:0,clipPath:'inset(0 0 100% 0)',duration:1.3,ease:'power3.out',clearProps:'clipPath,transform,opacity',scrollTrigger:{trigger:el,start:'top 90%'}});
+    });
+    $$('[data-stagger]').forEach(function(box){
+      gsap.from(box.children,{y:50,opacity:0,duration:1.1,stagger:.14,ease:'power3.out',scrollTrigger:{trigger:box,start:'top 85%'}});
+    });
+    gsap.fromTo('#img-maison',{scale:1.3,yPercent:-6},{scale:1,yPercent:6,ease:'none',scrollTrigger:{trigger:'#photo',start:'top bottom',end:'bottom top',scrub:true}});
+    gsap.from('#photo',{clipPath:'inset(100% 0 0 0)',duration:1.6,ease:'power4.out',clearProps:'clipPath',scrollTrigger:{trigger:'#photo',start:'top 85%'}});
+    gsap.to('.giant',{yPercent:-8,ease:'none',scrollTrigger:{trigger:'.foot',start:'top bottom',end:'bottom bottom',scrub:true}});
+    $$('.marquee').forEach(function(mq,i){
+      gsap.to(mq.firstElementChild,{skewX:i?4:-4,ease:'none',scrollTrigger:{trigger:mq,start:'top bottom',end:'bottom top',scrub:1}});
+    });
+    gsap.to('#bar',{scaleX:1,ease:'none',scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:.3}});
+  }
+
+  try{initMain()}catch(e){glOK=false;var cv=$('#gl');if(cv)cv.style.display='none'}
+  if(glOK){choreo();setTimeout(makeImages,60)}
+  else{
+    $$('[data-rv]').forEach(function(el){el.style.opacity=1});
+  }
+  addEventListener('load',function(){ScrollTrigger.refresh()});
+})();
+</script>
 </body>
 </html>
