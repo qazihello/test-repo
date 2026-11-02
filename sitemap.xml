@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://futurexpixel.com/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://futurexpixel.com/og-image.jpg</image:loc>
+      <image:title>FuturexPixel - Independent Digital Studio</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://futurexpixel.com/logo-full.png</image:loc>
+      <image:title>FuturexPixel Logo</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://futurexpixel.com/portfolio.html</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>

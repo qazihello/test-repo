@@ -1,0 +1,19 @@
+# robots.txt for FuturexPixel
+# https://futurexpixel.com
+
+# Allow all search engines to crawl everything
+User-agent: *
+Allow: /
+
+# Block crawling of any admin/private files (future-proofing)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /*.log$
+
+# Allow Google Image search to index images
+User-agent: Googlebot-Image
+Allow: /
+
+# Sitemap location
+Sitemap: https://futurexpixel.com/sitemap.xml
