@@ -4,18 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NextPhase Solutions &amp; Advisory — Integrated Geoscience Solutions</title>
-<meta name="description" content="NextPhase connects businesses with the right technology and solution providers to deliver superior integrated subsurface insights through collaboration and innovation.">
-<meta name="theme-color" content="#0b2545">
+<meta name="description" content="NextPhase connects businesses with the right technology and solution providers to deliver superior integrated subsurface insights.">
+<meta name="theme-color" content="#06182f">
 <link rel="icon" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="bg" aria-hidden="true"><div class="strata"></div></div>
+<div class="glow" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<!-- depth gauge -->
+<aside class="gauge" aria-hidden="true">
+  <span class="g-label">Depth</span>
+  <div class="g-track"><i class="g-fill"></i><b class="g-dot"></b></div>
+  <span class="g-depth"><em id="depth">0</em> m</span>
+  <span class="g-layer" id="layer">Surface</span>
+</aside>
+
 <header class="nav" id="top">
-  <a class="brand" href="#top" aria-label="NextPhase Solutions &amp; Advisory — home"><img src="assets/logo.png" alt="NextPhase Solutions &amp; Advisory" width="190" height="49"></a>
+  <a class="brand" href="#top" aria-label="NextPhase — home"><img src="assets/logo-light.png" alt="NextPhase Solutions &amp; Advisory" width="190" height="49"></a>
   <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
   <nav id="menu" class="menu">
     <a href="#about">About</a>
@@ -27,188 +39,174 @@
 </header>
 
 <main>
-<!-- HERO -->
-<section class="hero">
-  <svg class="contours" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <g fill="none" stroke="#0f6cbf" stroke-width="1.2">
-      <path d="M-50 560C200 470 330 640 560 590S900 380 1120 450 1380 600 1500 540"/>
-      <path d="M-50 600C210 515 340 680 565 632S905 430 1125 497 1380 648 1500 590" opacity=".85"/>
-      <path d="M-50 640C220 560 350 720 570 674S910 480 1130 544 1380 696 1500 640" opacity=".7"/>
-      <path d="M-50 680C230 605 360 760 575 716S915 530 1135 591 1380 744 1500 690" opacity=".55"/>
-      <path d="M-50 720C240 650 370 800 580 758S920 580 1140 638 1380 792 1500 740" opacity=".4"/>
-      <path d="M-50 760C250 695 380 840 585 800S925 630 1145 685 1380 840 1500 790" opacity=".28"/>
-      <path d="M-50 520C190 425 320 600 555 548S895 330 1115 403 1380 552 1500 490" opacity=".85"/>
-      <path d="M-50 480C180 380 310 560 550 506S890 280 1110 356 1380 504 1500 440" opacity=".7"/>
-      <path d="M-50 440C170 335 300 520 545 464S885 230 1105 309 1380 456 1500 390" opacity=".55"/>
-      <path d="M-50 400C160 290 290 480 540 422S880 180 1100 262 1380 408 1500 340" opacity=".4"/>
-      <path d="M-50 360C150 245 280 440 535 380S875 130 1095 215 1380 360 1500 290" opacity=".28"/>
-      <path d="M-50 320C140 200 270 400 530 338S870 80 1090 168 1380 312 1500 240" opacity=".16"/>
-    </g>
-  </svg>
+<!-- 1 · SURFACE -->
+<section class="hero" data-layer="Surface">
+  <img class="slot" src="assets/gen/hero.jpg" alt="" onerror="this.remove()">
+  <canvas id="seismic"></canvas>
   <div class="hero-inner">
-    <p class="eyebrow">Geoscience · Technology · Collaboration</p>
-    <h1>Advancing Superior Integrated Geoscience Solutions <em>Through Collaboration and Innovation</em></h1>
-    <p class="lead">We connect businesses with the right technology and solution providers, creating superior integrated subsurface insights — without the high costs and rigidity of traditional methods.</p>
-    <div class="hero-actions">
-      <a class="btn primary" href="#solutions">Explore our solutions</a>
-      <a class="btn ghost" href="#contact">Talk to us</a>
-    </div>
+    <p class="eyebrow"><span></span>Geoscience · Technology · Collaboration</p>
+    <h1 class="split">Advancing Superior Integrated Geoscience Solutions</h1>
+    <p class="h1-sub split">Through Collaboration and Innovation</p>
+    <p class="lead">We connect businesses with the right technology and solution providers — and turn complex subsurface data into clear decisions.</p>
   </div>
-  <ul class="hero-stats">
-    <li><strong>60%+</strong><span>faster Basin-to-Prospect evaluation delivered at PETRONAS</span></li>
-    <li><strong>2023</strong><span>ESRI Special Achievement Award</span></li>
-    <li><strong>Vendor-neutral</strong><span>the right components for each client</span></li>
-  </ul>
+  <a href="#about" class="cue"><span>Scroll to descend</span><i></i></a>
 </section>
 
-<!-- VISION -->
-<section class="vision" id="about">
+<!-- 2 · OVERBURDEN — VISION -->
+<section class="vision" id="about" data-layer="Overburden">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <p class="eyebrow">About NextPhase</p>
-      <h2>Our Vision</h2>
+    <p class="eyebrow"><span></span>About NextPhase · Our Vision</p>
+    <p class="statement words">To be a trusted geoscience consulting partner, recognised for technical excellence, independent insight and the ability to turn complex technical challenges into practical, effective solutions.</p>
+    <div class="two">
+      <p class="reveal">Through experience, collaboration and a deep understanding of geoscience and technology, we strive to help organisations improve the way they work, make better-informed decisions and realise greater value from their technical capabilities.</p>
+      <p class="reveal">We believe the best outcomes come from combining sound technical understanding with innovative thinking, proven methodologies and a collaborative approach.</p>
     </div>
-    <div class="vision-grid">
-      <blockquote class="reveal">To be a trusted geoscience consulting partner, recognised for technical excellence, independent insight and the ability to turn complex technical challenges into practical, effective solutions.</blockquote>
-      <div class="vision-copy reveal">
-        <p>Through experience, collaboration and a deep understanding of geoscience and technology, we strive to help organisations improve the way they work, make better-informed decisions and realise greater value from their technical capabilities.</p>
-        <p>We believe the best outcomes come from combining sound technical understanding with innovative thinking, proven methodologies and a collaborative approach.</p>
-      </div>
-    </div>
-    <p class="tagline reveal">Empowering Innovation, Unleashing Potential</p>
+    <p class="mega reveal">Empowering Innovation,<br><em>Unleashing Potential</em></p>
   </div>
 </section>
 
-<!-- COMPANY DESCRIPTION -->
-<section class="story">
-  <div class="wrap story-grid">
-    <div class="story-title reveal">
-      <p class="eyebrow">Who we are</p>
-      <h2>Company Description</h2>
-      <p class="pull">One size does not fit all.</p>
+<!-- 3 · SOURCE ROCK — COMPANY DESCRIPTION (pinned story) -->
+<section class="story" data-layer="Source Rock">
+  <div class="story-pin wrap">
+    <div class="story-left">
+      <p class="eyebrow"><span></span>Company Description</p>
+      <h2>One size does<br>not fit <em>all.</em></h2>
+      <ol class="dots" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li></ol>
     </div>
-    <div class="story-body">
-      <p class="reveal">In today’s rapidly evolving Energy landscape, nearly every aspect is facing transformative pressures. At the heart of this change, from the subsurface point of view, lies the growing need for superior integrated geoscience solutions focusing on detailed reservoir characterizations, CCUS and sustainability.</p>
-      <p class="reveal">The convergence of advanced software applications and generative AI technologies, often leave organizations struggling to keep up or fully realize their benefits. This complexity is further amplified by the ever-expanding availability of data and the increasing computational demands needed to harness its full potential.</p>
-      <p class="reveal">In many organizations, internal expertise is fragmented, resulting in siloed knowledge that makes it difficult to implement cost-effective, efficient workflows. Furthermore, integrated solutions are often promoted by single technology providers, who impose high commitment costs and inflexible systems that may not align with the unique needs of every business. The ongoing tension between business requirements and the pursuit of technical excellence is an ever-present challenge.</p>
-      <p class="reveal strong">We believe that one size does not fit all. We are committed to connecting the right technological components and solution providers in a tailored way to meet each client’s unique needs. Our approach seeks to break down silos, bridge gaps, and create flexible, integrated solutions that drive meaningful subsurface insights — without the high costs, rigidity, or fear that often accompany traditional implementations.</p>
-      <p class="reveal">By fostering a culture of innovation and collaboration, we aim to empower businesses to optimize workflows, and unlock the true potential of their data and technology, ensuring they stay ahead in the ever-evolving energy landscape.</p>
+    <div class="steps">
+      <article class="step"><span class="no">01 / 05</span><h3>The pressure</h3><p>In today’s rapidly evolving Energy landscape, nearly every aspect is facing transformative pressures. At the heart of this change, from the subsurface point of view, lies the growing need for superior integrated geoscience solutions focusing on detailed reservoir characterizations, CCUS and sustainability.</p></article>
+      <article class="step"><span class="no">02 / 05</span><h3>The complexity</h3><p>The convergence of advanced software applications and generative AI technologies, often leave organizations struggling to keep up or fully realize their benefits. This complexity is further amplified by the ever-expanding availability of data and the increasing computational demands needed to harness its full potential.</p></article>
+      <article class="step"><span class="no">03 / 05</span><h3>The silos</h3><p>In many organizations, internal expertise is fragmented, resulting in siloed knowledge that makes it difficult to implement cost-effective, efficient workflows. Furthermore, integrated solutions are often promoted by single technology providers, who impose high commitment costs and inflexible systems that may not align with the unique needs of every business. The ongoing tension between business requirements and the pursuit of technical excellence is an ever-present challenge.</p></article>
+      <article class="step"><span class="no">04 / 05</span><h3>Our answer</h3><p>We believe that one size does not fit all. We are committed to connecting the right technological components and solution providers in a tailored way to meet each client’s unique needs. Our approach seeks to break down silos, bridge gaps, and create flexible, integrated solutions that drive meaningful subsurface insights — without the high costs, rigidity, or fear that often accompany traditional implementations.</p></article>
+      <article class="step"><span class="no">05 / 05</span><h3>The promise</h3><p>By fostering a culture of innovation and collaboration, we aim to empower businesses to optimize workflows, and unlock the true potential of their data and technology, ensuring they stay ahead in the ever-evolving energy landscape.</p></article>
     </div>
   </div>
 </section>
 
-<!-- SOLUTIONS -->
-<section class="solutions" id="solutions">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <p class="eyebrow light">What we do</p>
-      <h2>Solutions and Advisory</h2>
+<!-- 4 · RESERVOIR — SOLUTIONS (horizontal scroll) -->
+<section class="solutions" id="solutions" data-layer="Reservoir">
+  <div class="h-track">
+    <div class="h-panel intro">
+      <p class="eyebrow"><span></span>What we do</p>
+      <h2>Solutions and <em>Advisory</em></h2>
       <p class="sub">Facilitating tailored solutions by connecting businesses with the right technology and solution providers thereby creating superior integrated subsurface insights while avoiding the high costs and rigidity of traditional methods.</p>
+      <span class="hint">Keep scrolling →</span>
     </div>
-    <div class="cards">
-      <article class="card reveal">
-        <span class="num">01</span>
-        <h3>Technology Solutions</h3>
-        <ul>
-          <li>Facilitation of POCs and technical evaluations</li>
-          <li>Integrated AI/ML solutions</li>
-          <li>Immersive Extended Reality systems with enhanced data analytic capabilities</li>
-        </ul>
-      </article>
-      <article class="card reveal">
-        <span class="num">02</span>
-        <h3>Consulting / Advisory</h3>
-        <ul>
-          <li>Project management and QC</li>
-          <li>Reservoir characterization studies</li>
-          <li>Software and workflow rationalization and optimization</li>
-          <li>Training</li>
-        </ul>
-      </article>
-    </div>
+    <article class="h-panel card">
+      <img class="slot" src="assets/gen/tech.jpg" alt="" onerror="this.remove()">
+      <span class="big-no">01</span>
+      <h3>Technology Solutions</h3>
+      <ul>
+        <li>Facilitation of POCs and technical evaluations</li>
+        <li>Integrated AI/ML solutions</li>
+        <li>Immersive Extended Reality systems with enhanced data analytic capabilities</li>
+      </ul>
+    </article>
+    <article class="h-panel card">
+      <img class="slot" src="assets/gen/consult.jpg" alt="" onerror="this.remove()">
+      <span class="big-no">02</span>
+      <h3>Consulting / Advisory</h3>
+      <ul>
+        <li>Project management and QC</li>
+        <li>Reservoir characterization studies</li>
+        <li>Software and workflow rationalization and optimization</li>
+        <li>Training</li>
+      </ul>
+    </article>
   </div>
 </section>
 
-<!-- LEADERSHIP -->
-<section class="leadership" id="leadership">
+<!-- 5 · SEAL — LEADERSHIP -->
+<section class="leadership" id="leadership" data-layer="Seal">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <p class="eyebrow">Background and Experience</p>
-      <h2>Next Phase Leadership</h2>
-    </div>
+    <p class="eyebrow"><span></span>Background and Experience</p>
+    <h2 class="mega-h">Next Phase <em>Leadership</em></h2>
+
+    <ul class="stats">
+      <li class="reveal"><strong><span data-count="60">0</span>%+</strong><span>faster Basin-to-Prospect evaluation times</span></li>
+      <li class="reveal"><strong><span data-count="2023" data-plain>0</span></strong><span>ESRI Special Achievement Award</span></li>
+      <li class="reveal"><strong>1<sup>st</sup></strong><span>ChatGPT-powered Exploration system at PETRONAS</span></li>
+    </ul>
+
     <div class="lead-grid">
-      <aside class="portrait reveal">
-        <img src="assets/eric.jpg" alt="Eric Andersen, Founder of NextPhase" width="590" height="788">
+      <aside class="portrait">
+        <div class="frame"><img src="assets/eric.jpg" alt="Eric Andersen, Founder of NextPhase" width="590" height="788"></div>
         <div class="cap"><strong>Eric Andersen</strong><span>Founder</span></div>
       </aside>
       <div class="lead-copy">
         <p class="big reveal">An accomplished Senior Geoscientist and strategic leader with extensive experience in Geophysics, Geology, and Petroleum Systems, with a proven track record of driving transformational change within the energy sector.</p>
         <p class="reveal">With deep expertise in integrated geoscience evaluations, combined with a broad global network of technical experts and solution partners, Eric is highly proficient in leveraging cutting-edge technologies to optimize workflows, enhance decision-making, and accelerate exploration and development processes.</p>
         <h3 class="reveal">Key Leadership Achievements</h3>
-        <ul class="timeline">
-          <li class="reveal"><h4>Innovation Leadership</h4><p>Spearheaded PETRONAS’ <em>NexTGEN</em> Exploration technology initiative, driving the integration of Geology and Geophysics with a focus on reducing uncertainty and maximizing accuracy through data-driven solutions. This initiative improved Basin-to-Prospect evaluation times by over 60%, significantly enhancing operational efficiency.</p></li>
-          <li class="reveal"><h4>Mentorship and Talent Development</h4><p>As a senior member of corporate mentorship programs, played a pivotal role in the professional development of junior staff, providing guidance on both technical expertise and career progression within a diverse, multicultural environment.</p></li>
-          <li class="reveal"><h4>Technological Transformation</h4><p>Involved with the successful migration of PETRONAS’ Exploration software and systems to a Cloud-based infrastructure, positioning the organization at the forefront of technological innovation.</p></li>
-          <li class="reveal"><h4>Award-Winning Initiatives</h4><p>Championed the development of <em>Explore on the Go</em>, a cloud-based GIS portal, which earned the prestigious 2023 Special Achievement Award at the ESRI User Conference.</p></li>
-          <li class="reveal"><h4>AI-Driven Innovation</h4><p>Drove the ideation and creation of PETRONAS’ first Exploration based ChatGPT-powered system, enabling seamless access to the company’s unstructured data and enhancing knowledge management capabilities.</p></li>
-        </ul>
+        <ol class="ach">
+          <li class="reveal"><span>01</span><div><h4>Innovation Leadership</h4><p>Spearheaded PETRONAS’ <em>NexTGEN</em> Exploration technology initiative, driving the integration of Geology and Geophysics with a focus on reducing uncertainty and maximizing accuracy through data-driven solutions. This initiative improved Basin-to-Prospect evaluation times by over 60%, significantly enhancing operational efficiency.</p></div></li>
+          <li class="reveal"><span>02</span><div><h4>Mentorship and Talent Development</h4><p>As a senior member of corporate mentorship programs, played a pivotal role in the professional development of junior staff, providing guidance on both technical expertise and career progression within a diverse, multicultural environment.</p></div></li>
+          <li class="reveal"><span>03</span><div><h4>Technological Transformation</h4><p>Involved with the successful migration of PETRONAS’ Exploration software and systems to a Cloud-based infrastructure, positioning the organization at the forefront of technological innovation.</p></div></li>
+          <li class="reveal"><span>04</span><div><h4>Award-Winning Initiatives</h4><p>Championed the development of <em>Explore on the Go</em>, a cloud-based GIS portal, which earned the prestigious 2023 Special Achievement Award at the ESRI User Conference.</p></div></li>
+          <li class="reveal"><span>05</span><div><h4>AI-Driven Innovation</h4><p>Drove the ideation and creation of PETRONAS’ first Exploration based ChatGPT-powered system, enabling seamless access to the company’s unstructured data and enhancing knowledge management capabilities.</p></div></li>
+        </ol>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PARTNERS -->
-<section class="partners" id="partners">
+<!-- 6 · PARTNERS -->
+<section class="partners" id="partners" data-layer="Basement">
   <div class="wrap">
-    <div class="sec-head reveal center">
-      <p class="eyebrow">Our network</p>
-      <h2>Solution Partners</h2>
-      <p class="sub">The right technology for each client, from a trusted network of solution providers.</p>
+    <p class="eyebrow"><span></span>Our network</p>
+    <h2 class="mega-h">Solution <em>Partners</em></h2>
+  </div>
+  <div class="marquee" aria-label="Solution partners">
+    <div class="m-track">
+      <div class="m-set">
+        <div class="logo"><img src="assets/silverarrow.png" alt="Silver Arrow"></div>
+        <div class="logo"><img src="assets/igloo.png" alt="igloo"></div>
+        <div class="logo"><img src="assets/baselinez.png" alt="Baselinez"></div>
+        <div class="logo"><img src="assets/silverarrow.png" alt=""></div>
+        <div class="logo"><img src="assets/igloo.png" alt=""></div>
+        <div class="logo"><img src="assets/baselinez.png" alt=""></div>
+      </div>
     </div>
-    <ul class="logos reveal">
-      <li><img src="assets/silverarrow.png" alt="Silver Arrow"></li>
-      <li><img src="assets/igloo.png" alt="igloo"></li>
-      <li><img src="assets/baselinez.png" alt="Baselinez"></li>
-    </ul>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section class="contact" id="contact">
-  <div class="wrap contact-grid">
-    <div class="reveal">
-      <p class="eyebrow light">Get in touch</p>
-      <h2>Contact</h2>
-      <p class="sub">Tell us about your subsurface challenge — we’ll connect you with the right solution.</p>
-      <dl class="details">
-        <div><dt>Phone</dt><dd><a href="tel:+60172681754">+60 17 268 1754</a></dd></div>
-        <div><dt>Location</dt><dd>36<sup>th</sup> Floor, Menara Maxis KLCC<br>50088 Kuala Lumpur, Malaysia</dd></div>
-        <div><dt>Email</dt><dd><a href="mailto:ericandersen@nextphasesoln.com">ericandersen@nextphasesoln.com</a></dd></div>
-      </dl>
+<!-- 7 · CONTACT -->
+<section class="contact" id="contact" data-layer="Core">
+  <img class="slot" src="assets/gen/contact.jpg" alt="" onerror="this.remove()">
+  <div class="wrap">
+    <p class="eyebrow"><span></span>Contact</p>
+    <h2 class="mega-h">Let’s find your<br><em>next phase.</em></h2>
+    <div class="contact-grid">
+      <div>
+        <dl class="details">
+          <div><dt>Phone</dt><dd><a href="tel:+60172681754">+60 17 268 1754</a></dd></div>
+          <div><dt>Location</dt><dd>36<sup>th</sup> Floor, Menara Maxis KLCC<br>50088 Kuala Lumpur, Malaysia</dd></div>
+          <div><dt>Email</dt><dd><a href="mailto:ericandersen@nextphasesoln.com">ericandersen@nextphasesoln.com</a></dd></div>
+        </dl>
+      </div>
+      <form class="form" id="contact-form" novalidate>
+        <div class="row">
+          <label>First Name<input name="first" autocomplete="given-name" required></label>
+          <label>Last Name<input name="last" autocomplete="family-name"></label>
+        </div>
+        <div class="row">
+          <label>Email<input type="email" name="email" autocomplete="email" required></label>
+          <label>Phone<input type="tel" name="phone" autocomplete="tel"></label>
+        </div>
+        <label>Message<textarea name="message" rows="4" required></textarea></label>
+        <button class="btn" type="submit"><span>Submit</span><i>→</i></button>
+        <p class="note" role="status" aria-live="polite"></p>
+      </form>
     </div>
-    <form class="form reveal" id="contact-form" novalidate>
-      <div class="row">
-        <label>First Name<input name="first" autocomplete="given-name" required></label>
-        <label>Last Name<input name="last" autocomplete="family-name"></label>
-      </div>
-      <div class="row">
-        <label>Email<input type="email" name="email" autocomplete="email" required></label>
-        <label>Phone<input type="tel" name="phone" autocomplete="tel"></label>
-      </div>
-      <label>Message<textarea name="message" rows="5" required></textarea></label>
-      <button class="btn primary" type="submit">Submit</button>
-      <p class="note" role="status" aria-live="polite"></p>
-    </form>
   </div>
+  <footer class="foot">
+    <img src="assets/logo-light.png" alt="NextPhase" width="150" height="38">
+    <small>© <span id="yr">2026</span> NextPhase Solutions &amp; Advisory · Empowering Innovation, Unleashing Potential</small>
+  </footer>
 </section>
 </main>
 
-<footer class="foot">
-  <img src="assets/logo.png" alt="NextPhase" width="150" height="38">
-  <p>Empowering Innovation, Unleashing Potential</p>
-  <small>© <span id="yr">2026</span> NextPhase Solutions &amp; Advisory. All rights reserved.</small>
-</footer>
-
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
