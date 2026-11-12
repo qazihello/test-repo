@@ -60,7 +60,7 @@ mark{background:var(--yellow);color:var(--on-yellow);padding:0 .12em;border-radi
 .tool{background:var(--surface);color:var(--ink);border:2.5px solid var(--on-yellow);border-radius:22px;box-shadow:10px 10px 0 var(--yellow);transform:rotate(1.6deg);position:relative}
 .tool-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:2.5px solid var(--line)}
 .tool-bar span.d{width:12px;height:12px;border-radius:50%;border:2px solid var(--line)}
-.tool-bar .mono{margin-left:auto;color:var(--muted)}
+.tool-bar .mono{margin-left:6px;color:var(--muted)}
 textarea{display:block;width:100%;min-height:150px;padding:18px;border:0;outline:0;resize:vertical;background:transparent;color:var(--ink);font:500 18px/1.55 var(--sans)}
 textarea::placeholder{color:var(--muted)}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:2.5px solid var(--line)}
@@ -68,6 +68,18 @@ textarea::placeholder{color:var(--muted)}
 dt{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 dd{font:800 clamp(24px,3vw,34px)/1.1 var(--display);letter-spacing:-.03em;margin-top:4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .sticker{position:absolute;right:-18px;top:-30px;width:96px;height:96px;border-radius:50%;background:var(--yellow);color:var(--on-yellow);border:2.5px solid var(--on-yellow);display:grid;place-items:center;text-align:center;font:800 15px/1.05 var(--display);transform:rotate(14deg)}
+
+.trust{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:26px;font:600 14px var(--sans);opacity:.9}
+.chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 16px;border-bottom:2.5px solid var(--line)}
+.chips .mono{color:var(--muted)}
+.chip{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 13px;font:700 13px var(--sans);cursor:pointer;transition:background .15s}
+.chip:hover{background:var(--yellow);color:var(--on-yellow)}
+.limits{display:grid;gap:10px;padding:14px 16px 16px;border-top:2.5px solid var(--line)}
+.lim{display:grid;grid-template-columns:128px 1fr 74px;gap:12px;align-items:center;font:500 12px var(--mono);color:var(--muted)}
+.lim b{text-align:right;color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.bar{height:12px;border:2px solid var(--line);border-radius:99px;overflow:hidden;background:var(--bg)}
+.bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .25s}
+.lim.over .bar i{background:#ff3b30} .lim.over b{color:#ff3b30}
 
 /* ticker */
 .ticker{background:var(--yellow);color:var(--on-yellow);border-block:3px solid var(--on-yellow);overflow:hidden;padding:14px 0}
@@ -148,6 +160,7 @@ input:focus{box-shadow:0 0 0 3px var(--blue)}
   .c-count,.c-cite,.c-shop,.card{grid-column:1/-1;grid-row:auto}
   .split,.steps{grid-template-columns:1fr}
   .news a{grid-template-columns:1fr auto;gap:6px 12px}.news .mono{grid-column:1/-1}.news .tag{display:none}
+  .lim{grid-template-columns:96px 1fr 64px;gap:8px}
   .sticker{right:-6px;top:-34px;width:84px;height:84px;font-size:13px}
   .stats{grid-template-columns:1fr 1fr}.stats div:nth-child(2){border-right:0}.stats div:nth-child(-n+2){border-bottom:2px solid var(--line)}
 }
@@ -171,25 +184,37 @@ input:focus{box-shadow:0 0 0 3px var(--blue)}
 
     <div class="hero-grid">
       <div class="rise">
-        <span class="pill"><i></i>No sign-up. No paywall. Works on your phone.</span>
-        <h1>Free tools<br>that just <mark>work.</mark></h1>
-        <p class="lede">Count words, build citations and catch up on AI news. Type, get your answer, done. Your text never leaves your browser.</p>
+        <span class="pill"><i></i>Made for 2 a.m. deadlines</span>
+        <h1>Paste it.<br>Count it.<br><mark>Ship it.</mark></h1>
+        <p class="lede">Essay due at midnight? Tweet running long? Tectonify shows how long your text is, how long it takes to read, and whether it fits where you are posting it.</p>
         <div class="cta-row">
           <a href="#tools" class="btn btn-yellow btn-lg">Start now →</a>
           <a href="#news" class="btn btn-lg">Read AI news</a>
         </div>
+        <p class="trust"><span>✓ Free</span><span>✓ No account</span><span>✓ Your text stays on your device</span></p>
       </div>
 
       <div class="tool rise" style="animation-delay:.12s">
         <div class="sticker">100%<br>free</div>
-        <div class="tool-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="mono">word counter</span></div>
-        <textarea id="wcText" spellcheck="false" aria-label="Type or paste your text">Tectonify counts every word as you type. Paste an essay, a caption or a cover letter and watch the numbers move.</textarea>
+        <div class="tool-bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="mono">paste anything</span></div>
+        <div class="chips" role="group" aria-label="Try a sample">
+          <span class="mono">Try a sample:</span>
+          <button class="chip" data-sample="The printing press did not just make books cheaper. It changed who was allowed to have an opinion. Within fifty years, ideas that once needed a monastery's permission could travel across Europe in a bag of pamphlets.">Essay intro</button>
+          <button class="chip" data-sample="Shipped my first side project today. Nobody asked for it, nobody is waiting for it, and I have never been prouder of anything I made. Small things count too. Especially the small things that you finish.">Tweet</button>
+          <button class="chip" data-sample="Dear hiring team, I am writing to apply for the content role. For the past two years I have written, edited and measured every word I publish, and I would love to bring that habit to your team.">Cover letter</button>
+        </div>
+        <textarea id="wcText" spellcheck="false" aria-label="Type or paste your text">Shipped my first side project today. Nobody asked for it, nobody is waiting for it, and I have never been prouder of anything I made. Small things count too. Especially the small things that you finish.</textarea>
         <dl class="stats">
           <div><dt>Words</dt><dd id="sWords">0</dd></div>
           <div><dt>Chars</dt><dd id="sChars">0</dd></div>
           <div><dt>Sentences</dt><dd id="sSent">0</dd></div>
           <div><dt>Read time</dt><dd id="sRead">0s</dd></div>
         </dl>
+        <div class="limits" aria-label="Does it fit?">
+          <div class="lim" data-max="280"><span>X post</span><div class="bar"><i></i></div><b></b></div>
+          <div class="lim" data-max="160"><span>Meta description</span><div class="bar"><i></i></div><b></b></div>
+          <div class="lim" data-max="2200"><span>Instagram caption</span><div class="bar"><i></i></div><b></b></div>
+        </div>
       </div>
     </div>
   </div>
@@ -314,7 +339,16 @@ input:focus{box-shadow:0 0 0 3px var(--blue)}
     $('sChars').textContent = t.length.toLocaleString();
     $('sSent').textContent = (t.match(/[^.!?]+[.!?]+(\s|$)/g) || (t.trim() ? [1] : [])).length;
     $('sRead').textContent = fmt(Math.round(w / 238 * 60));
+    document.querySelectorAll('.lim').forEach(function (l) {
+      var max = +l.dataset.max, n = t.length;
+      l.querySelector('i').style.width = Math.min(100, n / max * 100) + '%';
+      l.querySelector('b').textContent = n + '/' + max;
+      l.classList.toggle('over', n > max);
+    });
   }
+  document.querySelectorAll('.chip').forEach(function (c) {
+    c.addEventListener('click', function () { wc.value = c.dataset.sample; count(); });
+  });
   wc.addEventListener('input', count); count();
 
   var style = 'apa';
