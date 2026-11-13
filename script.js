@@ -141,7 +141,7 @@
   var st = $('.statement');
   st.setAttribute('aria-label', st.textContent.trim());
   st.innerHTML = st.textContent.trim().split(/\s+/).map(function (w) { return '<span class="wd" aria-hidden="true">' + w + '</span>'; }).join(' ');
-  gsap.to($$('.wd', st), { opacity: 1, stagger: .5, ease: 'none', scrollTrigger: { trigger: st, start: 'top 78%', end: 'bottom 42%', scrub: true } });
+  gsap.to($$('.wd', st), { opacity: 1, stagger: .5, ease: 'none', scrollTrigger: { trigger: st, start: 'top 78%', end: 'bottom 55%', scrub: true } });
 
   // generic reveals
   ScrollTrigger.batch('.reveal', {
@@ -162,14 +162,14 @@
   gsap.set(steps, { autoAlpha: 0, y: 40 }); gsap.set(steps[0], { autoAlpha: 1, y: 0 });
   dots[0].classList.add('on');
   mm.add('(min-width: 901px)', function () {
-    var tl = gsap.timeline({ defaults: { ease: 'power2.inOut' }, scrollTrigger: { trigger: '.story', start: 'top top', end: '+=450%', pin: true, scrub: .6, anticipatePin: 1 } });
+    var tl = gsap.timeline({ defaults: { ease: 'power2.inOut' }, scrollTrigger: { trigger: '.story', start: 'top top', end: '+=260%', pin: true, scrub: .6, anticipatePin: 1 } });
     steps.forEach(function (s, i) {
-      if (i === 0) { tl.to({}, { duration: .8 }); return; }
+      if (i === 0) { tl.to({}, { duration: .4 }); return; }
       var at = '>';
       tl.to(steps[i - 1], { autoAlpha: 0, y: -40, duration: .6 }, at)
         .call(function () { dots.forEach(function (x, k) { x.classList.toggle('on', k === i); }); }, null, '<.3')
         .to(s, { autoAlpha: 1, y: 0, duration: .6 }, '<.15')
-        .to({}, { duration: .9 });
+        .to({}, { duration: .5 });
     });
   });
   mm.add('(max-width: 900px)', function () {
