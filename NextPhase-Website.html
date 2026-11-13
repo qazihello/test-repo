@@ -100,24 +100,23 @@ section{position:relative}
 .step h3{font:italic 300 clamp(1.8rem,3.2vw,2.8rem) var(--serif);margin:10px 0 18px;color:#fff}
 .step p{margin:0;font-size:clamp(1rem,1.35vw,1.2rem);color:#cbdcf2;max-width:56ch}
 
-/* SOLUTIONS — horizontal */
-.solutions{overflow:hidden}
-.h-track{display:flex;width:max-content;height:100svh;min-height:640px;align-items:stretch}
-.h-panel{flex:none;display:flex;flex-direction:column;justify-content:center;position:relative;padding:0 clamp(24px,4vw,64px)}
-.h-panel.intro{width:min(56vw,760px);padding-left:var(--gut)}
+/* SOLUTIONS — both cards on one screen */
+.solutions{padding:14vh 0 10vh}
+.h-track{max-width:var(--wrap);margin:0 auto;padding:0 var(--gut);display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.h-panel{position:relative}
+.h-panel.intro{grid-column:1/-1;margin-bottom:6vh}
 .h-panel.intro h2{font-size:clamp(2.6rem,6.4vw,6rem)}
-.h-panel .sub{color:var(--muted);margin:28px 0 0;max-width:46ch}
-.hint{margin-top:36px;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--blue-2);font-weight:700}
-.h-panel.card{width:min(62vw,820px);margin:9vh 2vw;border:1px solid var(--line);border-radius:28px;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));overflow:hidden;padding:0 clamp(28px,4.5vw,72px)}
-.h-panel.card:last-child{margin-right:var(--gut)}
+.h-panel .sub{color:var(--muted);margin:28px 0 0;max-width:56ch}
+.h-panel.card{border:1px solid var(--line);border-radius:28px;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));overflow:hidden;padding:clamp(28px,3.4vw,52px);transition:transform .3s,border-color .3s}
+.h-panel.card:hover{transform:translateY(-6px);border-color:rgba(140,196,255,.5)}
 .card .slot{opacity:.38}
 .card::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,16,31,.85),rgba(4,16,31,.35));pointer-events:none}
 .card>*:not(.slot){position:relative;z-index:2}
-.big-no{position:absolute!important;right:4%;top:2%;font:italic 300 clamp(8rem,20vw,18rem)/1 var(--serif);color:rgba(124,192,255,.1)}
-.card h3{font-size:clamp(2.2rem,4.4vw,4rem);margin-bottom:34px}
-.card ul{list-style:none;margin:0;padding:0;max-width:44ch}
-.card li{padding:16px 0 16px 38px;border-top:1px solid var(--line);position:relative;color:#d9e7f8;font-size:1.08rem}
-.card li::before{content:"";position:absolute;left:0;top:30px;width:20px;height:2px;background:var(--blue-2)}
+.big-no{position:absolute!important;right:5%;top:0;font:italic 300 clamp(6rem,12vw,10rem)/1 var(--serif);color:rgba(124,192,255,.1)}
+.card h3{font-size:clamp(1.9rem,3.2vw,3rem);margin-bottom:26px}
+.card ul{list-style:none;margin:0;padding:0}
+.card li{padding:14px 0 14px 38px;border-top:1px solid var(--line);position:relative;color:#d9e7f8;font-size:1.05rem}
+.card li::before{content:"";position:absolute;left:0;top:28px;width:20px;height:2px;background:var(--blue-2)}
 
 /* LEADERSHIP */
 .leadership{padding:10vh 0 8vh}
@@ -128,7 +127,7 @@ section{position:relative}
 .stats strong{font:300 clamp(3.4rem,7.4vw,6.6rem)/1 var(--serif);color:#fff;letter-spacing:-.03em}
 .stats sup{font-size:.4em;vertical-align:top;position:relative;top:.3em}
 .stats li>span{color:var(--muted);font-size:.95rem;max-width:26ch}
-.lead-grid{display:grid;grid-template-columns:380px 1fr;gap:clamp(36px,7vw,110px);align-items:start}
+.lead-grid{margin-top:8vh;display:grid;grid-template-columns:380px 1fr;gap:clamp(36px,7vw,110px);align-items:start}
 .portrait{position:sticky;top:12vh}
 .frame{border-radius:24px;overflow:hidden;aspect-ratio:3/4;position:relative;box-shadow:0 40px 90px rgba(0,0,0,.55)}
 .frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(4,16,31,.65));}
@@ -202,11 +201,7 @@ textarea{resize:vertical}
   .menu.open{transform:none;visibility:visible}
   .menu a{padding:14px 16px;font-size:1rem}
   .menu a.cta{margin:8px 0 0;text-align:center}
-  /* horizontal -> vertical on small screens */
-  .h-track{flex-direction:column;width:auto;height:auto;padding:14vh 0}
-  .h-panel.intro{width:auto;padding:0 var(--gut) 40px}
-  .h-panel.card{width:auto;margin:0 var(--gut) 22px;padding:44px 26px}
-  .hint{display:none}
+  .h-track{grid-template-columns:1fr}
 }
 @media (max-width:560px){body{font-size:16px}.row{grid-template-columns:1fr}.brand img{height:36px}.ach li{grid-template-columns:44px 1fr}.logo{height:130px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.m-track,.cue i{animation:none}}
@@ -260,7 +255,7 @@ textarea{resize:vertical}
     <div class="two">
       <p class="reveal">We believe the best outcomes come from combining sound technical understanding with innovative thinking, proven methodologies and a collaborative approach.</p>
     </div>
-    <p class="mega reveal">Empowering Innovation,<br><em>Unleashing Potential</em></p>
+    <p class="mega">Empowering Innovation,<br><em>Unleashing Potential</em></p>
   </div>
 </section>
 
@@ -289,9 +284,8 @@ textarea{resize:vertical}
       <p class="eyebrow"><span></span>What we do</p>
       <h2>Solutions and <em>Advisory</em></h2>
       <p class="sub">Facilitating tailored solutions by connecting businesses with the right technology and solution providers thereby creating superior integrated subsurface insights while avoiding the high costs and rigidity of traditional methods.</p>
-      <span class="hint">Keep scrolling →</span>
-    </div>
-    <article class="h-panel card">
+          </div>
+    <article class="h-panel card reveal">
       <img class="slot" src="assets/gen/tech.jpg" alt="" onerror="this.remove()">
       <span class="big-no">01</span>
       <h3>Technology Solutions</h3>
@@ -301,7 +295,7 @@ textarea{resize:vertical}
         <li>Immersive Extended Reality systems with enhanced data analytic capabilities</li>
       </ul>
     </article>
-    <article class="h-panel card">
+    <article class="h-panel card reveal">
       <img class="slot" src="assets/gen/consult.jpg" alt="" onerror="this.remove()">
       <span class="big-no">02</span>
       <h3>Consulting / Advisory</h3>
@@ -321,11 +315,6 @@ textarea{resize:vertical}
     <p class="eyebrow"><span></span>Background and Experience</p>
     <h2 class="mega-h">Next Phase <em>Leadership</em></h2>
 
-    <ul class="stats">
-      <li class="reveal"><strong><span data-count="60">0</span>%+</strong><span>faster Basin-to-Prospect evaluation times</span></li>
-      <li class="reveal"><strong><span data-count="2023" data-plain>0</span></strong><span>ESRI Special Achievement Award</span></li>
-      <li class="reveal"><strong>1<sup>st</sup></strong><span>ChatGPT-powered Exploration system at PETRONAS</span></li>
-    </ul>
 
     <div class="lead-grid">
       <aside class="portrait">
@@ -613,17 +602,6 @@ textarea{resize:vertical}
     steps.forEach(function (s) { s.style.gridArea = 'auto'; });
     $('.dots').style.display = 'none';
     return function () { $('.steps').style.cssText = ''; steps.forEach(function (s) { s.style.gridArea = ''; }); $('.dots').style.display = ''; };
-  });
-
-  // horizontal solutions
-  mm.add('(min-width: 861px)', function () {
-    var tr = $('.h-track');
-    var dist = function () { return Math.max(0, tr.scrollWidth - window.innerWidth); };
-    gsap.to(tr, { x: function () { return -dist(); }, ease: 'none', scrollTrigger: {
-      trigger: '.solutions', start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: .6, invalidateOnRefresh: true, anticipatePin: 1 } });
-    $$('.big-no').forEach(function (n) {
-      gsap.fromTo(n, { xPercent: 12 }, { xPercent: -12, ease: 'none', scrollTrigger: { trigger: '.solutions', start: 'top top', end: function () { return '+=' + dist(); }, scrub: true } });
-    });
   });
 
   // portrait parallax

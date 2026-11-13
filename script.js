@@ -180,17 +180,6 @@
     return function () { $('.steps').style.cssText = ''; steps.forEach(function (s) { s.style.gridArea = ''; }); $('.dots').style.display = ''; };
   });
 
-  // horizontal solutions
-  mm.add('(min-width: 861px)', function () {
-    var tr = $('.h-track');
-    var dist = function () { return Math.max(0, tr.scrollWidth - window.innerWidth); };
-    gsap.to(tr, { x: function () { return -dist(); }, ease: 'none', scrollTrigger: {
-      trigger: '.solutions', start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: .6, invalidateOnRefresh: true, anticipatePin: 1 } });
-    $$('.big-no').forEach(function (n) {
-      gsap.fromTo(n, { xPercent: 12 }, { xPercent: -12, ease: 'none', scrollTrigger: { trigger: '.solutions', start: 'top top', end: function () { return '+=' + dist(); }, scrub: true } });
-    });
-  });
-
   // portrait parallax
   gsap.fromTo('.frame img', { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '.portrait', start: 'top bottom', end: 'bottom top', scrub: true } });
 
