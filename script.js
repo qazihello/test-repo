@@ -162,7 +162,7 @@
   gsap.set(steps, { autoAlpha: 0, y: 40 }); gsap.set(steps[0], { autoAlpha: 1, y: 0 });
   dots[0].classList.add('on');
   mm.add('(min-width: 901px)', function () {
-    var tl = gsap.timeline({ defaults: { ease: 'power2.inOut' }, scrollTrigger: { trigger: '.story', start: 'top top', end: '+=260%', pin: true, scrub: .6, anticipatePin: 1 } });
+    var tl = gsap.timeline({ defaults: { ease: 'power2.inOut' }, scrollTrigger: { trigger: '.story', start: 'top top', end: '+=200%', pin: true, scrub: .6, anticipatePin: 1 } });
     steps.forEach(function (s, i) {
       if (i === 0) { tl.to({}, { duration: .4 }); return; }
       var at = '>';
