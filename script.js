@@ -89,12 +89,13 @@
   /* ---------- 3D seismic cube (hero) ---------- */
   (function () {
     var cb = $('#cube'); if (!cb) return;
-    var cx2 = cb.getContext('2d'), cw, ch, S, dpr, G = 38, D = 0.34, HM = 0.2, vis2 = true, mx = 0, tmx = 0;
+    var cx2 = cb.getContext('2d'), cw, ch, S, dpr, G = 44, D = 0.22, HM = 0.2, OX, OY, VF, vis2 = true, mx = 0, tmx = 0;
     var hero = cb.parentNode;
     function fit() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       cw = cb.clientWidth; ch = cb.clientHeight; cb.width = cw * dpr; cb.height = ch * dpr; cx2.setTransform(dpr, 0, 0, dpr, 0, 0);
-      S = cw * 0.565;
+      if (cw > 760) { S = cw * 0.64; VF = 0.36; OX = cw * 0.56; OY = ch * 0.17; }
+      else { S = cw * 1.15; VF = 0.5; OX = cw * 0.5; OY = ch * 0.5; }
     }
     fit(); window.addEventListener('resize', fit);
     new IntersectionObserver(function (e) { vis2 = e[0].isIntersecting; }).observe(cb);
@@ -104,10 +105,10 @@
         + 0.032 * Math.sin(3.1 * x + 1.2 + t * 0.15) * Math.cos(2.5 * y + 0.4)
         + 0.02 * Math.sin(5.4 * x - 2.1 * y + t * 0.25) + 0.006 * Math.cos(8 * x + 4 * y - t * 0.2);
       var f1 = x * 0.82 + y * 0.57 - 0.72, f2 = x * 0.3 - y * 0.95 + 0.22;
-      z -= 0.07 / (1 + Math.exp(-f1 * 70)); z += 0.045 / (1 + Math.exp(-f2 * 70));
+      z -= 0.07 / (1 + Math.exp(-f1 * 26)); z += 0.045 / (1 + Math.exp(-f2 * 26));
       return z;
     }
-    function P(x, y, z, sh) { return [cw / 2 + (x - y) * 0.866 * S + (z + D) * sh, (HM + 0.02) * S + (x + y) * 0.5 * S - z * S]; }
+    function P(x, y, z, sh) { return [OX + (x - y) * 0.866 * S + (z + D) * sh, OY + (x + y) * VF * S - z * S]; }
     var wells = [[0.3, 0.38], [0.62, 0.55], [0.46, 0.2]];
     function render(now) {
       var t = now / 1000; mx += (tmx - mx) * 0.05; var sh = mx * 0.1 * S;
@@ -116,7 +117,7 @@
       for (i = 0; i <= G; i++) { hg[i] = []; for (j = 0; j <= G; j++) { var z = surf(i / G, j / G, t); hg[i][j] = z; if (z < zmin) zmin = z; if (z > zmax) zmax = z; } }
       // faces first (they sit under the surface in screen space)
       function face(edge) { // edge: 'L' = y=1 face, 'R' = x=1 face
-        var pts = [], u, k, K = 15;
+        var pts = [], u, k, K = 12;
         function E(uu, zz) { return edge === 'L' ? P(uu, 1, zz, sh) : P(1, uu, zz, sh); }
         function sz(uu) { return edge === 'L' ? surf(uu, 1, t) : surf(1, uu, t); }
         cx2.beginPath();

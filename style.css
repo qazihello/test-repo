@@ -56,8 +56,8 @@ section{position:relative}
 .hero .slot{opacity:.45;mix-blend-mode:screen}
 #seismic{position:absolute;inset:0;width:100%;height:100%}
 .hero-inner{position:relative;z-index:2;max-width:var(--wrap);width:100%;margin:0 auto;padding:90px var(--gut) 0}
-.hero h1{font-size:clamp(2.4rem,4vw,4.4rem);max-width:17ch;font-weight:300}
-.h1-sub{font:italic 300 clamp(1.3rem,2.1vw,2.1rem)/1.15 var(--serif);color:var(--blue-2);margin:.5em 0 0}
+.hero h1{font-size:clamp(2.4rem,5vw,5.4rem);max-width:14ch;font-weight:300}
+.h1-sub{font:italic 300 clamp(1.4rem,2.6vw,2.6rem)/1.15 var(--serif);color:var(--blue-2);margin:.5em 0 0}
 .lead{max-width:50ch;color:var(--muted);font-size:clamp(1rem,1.4vw,1.2rem);margin:30px 0 0}
 .split .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
 .split .w i{display:inline-block;font-style:inherit;transform:translateY(110%)}
@@ -201,6 +201,9 @@ textarea{resize:vertical}
 .pcard p{margin:0;color:var(--muted);font-size:1rem}
 @media (max-width:900px){.pcards{grid-template-columns:1fr}}
 
-/* hero seismic cube */
-#cube{position:absolute;z-index:1;right:max(4vw,60px);top:50%;width:min(46vw,680px);height:calc(min(46vw,680px)*.92);transform:translateY(-46%);pointer-events:none}
-@media (max-width:1000px){#cube{width:110vw;height:calc(110vw*.92);right:-24vw;top:auto;bottom:-6vh;transform:none;opacity:.5}}
+/* hero = the seismic cube, full bleed */
+#seismic{display:none}
+#cube{position:absolute;z-index:0;inset:0;width:100%;height:100%;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 100%);mask-image:linear-gradient(180deg,#000 72%,transparent 100%)}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(9,42,84,.94) 0%,rgba(9,42,84,.82) 30%,rgba(9,42,84,.25) 58%,transparent 78%)}
+.hero-inner,.cue{z-index:2}
+@media (max-width:760px){.hero::before{background:linear-gradient(180deg,rgba(9,42,84,.95) 0%,rgba(9,42,84,.8) 42%,rgba(9,42,84,.1) 78%,transparent 100%)}}
