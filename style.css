@@ -200,3 +200,8 @@ textarea{resize:vertical}
 .pcard h3{font:300 1.7rem/1.1 var(--serif);margin-top:6px}
 .pcard p{margin:0;color:var(--muted);font-size:1rem}
 @media (max-width:900px){.pcards{grid-template-columns:1fr}}
+.pcard .logo-link{display:block;text-decoration:none}
+.pcard h3 a{text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .35s,color .3s}
+.pcard h3 a:hover,.pcard h3 a:focus-visible{background-size:100% 1px;color:var(--blue-2)}
+.pcard h3 a span{color:var(--blue-2)}
+.pcard a:focus-visible{outline:2px solid var(--blue-2);outline-offset:4px;border-radius:8px}
